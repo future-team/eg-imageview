@@ -1,4 +1,4 @@
-# eg-upload
+# eg-imageview
 
 上传组件
 
