@@ -5,7 +5,9 @@
   "main": "lib/",
   "repository": "git@github.com:future-team/eg-imageview.git",
   "keywords": [
-    "core"
+    "eagle-ui",
+    "eg-imageview",
+    "eg"
   ],
   "scripts": {
     "build": "node_modules/.bin/gulp && node_modules/.bin/gulp min",

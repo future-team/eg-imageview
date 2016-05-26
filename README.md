@@ -1,6 +1,10 @@
 # eg-imageview
 
-上传组件
+单张图片预览组件，依赖于eagle-ui组件库。
+
+## UI展示
+
+![ui展示](example/img/test.gif)
 
 ## 使用
 
@@ -30,6 +34,8 @@
 
 ```
 
-## Command
+## 示例演示
+
+下载此项目到本地安装依赖包后执行 **npm run demo** 即可预览。
 
 
