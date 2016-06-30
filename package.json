@@ -1,6 +1,6 @@
 {
   "name": "eg-imageview",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "图片预览",
   "main": "lib/",
   "repository": "git@github.com:future-team/eg-imageview.git",

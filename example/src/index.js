@@ -5,7 +5,7 @@ import {Button,Dialog,Toast,Icon} from 'eagle-ui';
 
 let file = {
     name:'test',
-    url:'./src/test.jpg'
+    url:'./src/test2.jpg'
 };
 
 function show(){
@@ -15,7 +15,7 @@ function show(){
 ReactDom.render(
     <div>
         <Button onClick={show}>点击我显示图片预览</Button>
-        <ImageView id="testIamgeView" file={file} style={{width:'1200px'}} />
+        <ImageView id="testIamgeView" file={file}  />
     </div>,
     document.getElementById('root')
 );
