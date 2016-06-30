@@ -92,7 +92,7 @@ export default class ImageView extends Component{
                 <div style={{
                         overflow:'hidden'
                     }}>
-                    <img ref={this.imgId} src={file.url}  alt="" style={{width:"100%",maxHeight:(document.documentElement.clientHeight*1-100)+'px',transform:this.transform }} />
+                    <img ref={this.imgId} src={file.url}  alt="" style={{width:"100%",height:'auto',maxHeight:(document.documentElement.clientHeight*1-100)+'px',transform:this.transform }} />
                     <div className="icon-box">
                         <Icon onClick={::this.cssEnhance.bind(this,'rotate')} className="upload-icon" name="radio_unchecked" alt="旋转"></Icon>
                         <Icon onClick={::this.cssEnhance.bind(this,'max')} className="upload-icon"  name="add" alt="放大"></Icon>

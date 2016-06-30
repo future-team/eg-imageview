@@ -216,7 +216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                { style: {
 	                        overflow: 'hidden'
 	                    } },
-	                _react2['default'].createElement('img', { ref: this.imgId, src: file.url, alt: '', style: { width: "100%", maxHeight: document.documentElement.clientHeight * 1 - 100 + 'px', transform: this.transform } }),
+	                _react2['default'].createElement('img', { ref: this.imgId, src: file.url, alt: '', style: { width: "100%", height: 'auto', maxHeight: document.documentElement.clientHeight * 1 - 100 + 'px', transform: this.transform } }),
 	                _react2['default'].createElement(
 	                    'div',
 	                    { className: 'icon-box' },
