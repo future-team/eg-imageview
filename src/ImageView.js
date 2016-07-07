@@ -89,9 +89,7 @@ export default class ImageView extends Component{
 
         return (
             <Dialog id={this.props.id} isClose={true} isMask={true} title={file.name ||''}  {...this.props}>
-                <div style={{
-                        overflow:'hidden'
-                    }}>
+                <div>
                     <img ref={this.imgId} src={file.url}  alt="" style={{width:"100%",height:'auto',maxHeight:(document.documentElement.clientHeight*1-100)+'px',transform:this.transform }} />
                     <div className="icon-box">
                         <Icon onClick={::this.cssEnhance.bind(this,'rotate')} className="upload-icon" name="radio_unchecked" alt="旋转"></Icon>
