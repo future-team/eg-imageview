@@ -375,7 +375,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                msTransform: this.transform,
 	                                WebkitTransform: this.transform,
 	                                MozTransform: this.transform,
-	                                oTransform: this.transform,
+	                                OTransform: this.transform,
 	                                transform: this.transform }, this.state.modifyImgStyle) })
 	                    )
 	                ),
