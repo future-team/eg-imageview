@@ -196,7 +196,12 @@ export default class ImageView extends Component{
             this.draggable.reset();
         }
         let diffVal = diff*1;
+        // 如果为负数的话,图片就旋转了
+        if(scaleVal < 0){
+            return ;
+        }
         // 计算是否缩放
+        // TODO 需要优化
         let _zoom = zoom || scaleVal-1;
         if(_zoom != 0){
             _zoom = _zoom > 0 ? 0.5: 2
@@ -238,7 +243,7 @@ export default class ImageView extends Component{
                     <div className="icon-box">
                         <Icon onClick={::this.cssEnhance.bind(this,'rotate')} className="upload-icon" name="radio_unchecked" alt="旋转"></Icon>
                         <Icon onClick={::this.cssEnhance.bind(this,'max')} className="upload-icon"  name="add" alt="放大"></Icon>
-                        <Icon  onClick={::this.cssEnhance.bind(this,'min')} className="upload-icon" name="remove" alt="缩小"></Icon>
+                        <Icon onClick={::this.cssEnhance.bind(this,'min')} className="upload-icon" name="remove" alt="缩小"></Icon>
                     </div>
                 </div>
             </Dialog>
