@@ -197,7 +197,7 @@ export default class ImageView extends Component{
         }
         let diffVal = diff*1;
         // 如果为负数的话,图片就旋转了
-        if(scaleVal < 0){
+        if(scaleVal <= 0){
             return ;
         }
         // 计算是否缩放
