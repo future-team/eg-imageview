@@ -328,7 +328,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.draggable.reset();
 	        }
 	        var diffVal = diff * 1;
+	        // 如果为负数的话,图片就旋转了
+	        if (scaleVal < 0) {
+	            return;
+	        }
 	        // 计算是否缩放
+	        // TODO 需要优化
 	        var _zoom = zoom || scaleVal - 1;
 	        if (_zoom != 0) {
 	            _zoom = _zoom > 0 ? 0.5 : 2;
