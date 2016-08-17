@@ -342,7 +342,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.transform = 'scale(' + scaleVal + ', ' + scaleVal + ') rotate(' + rotateVal + 'deg) translate(' + diffVal + 'px, ' + diffVal + 'px)';
 	        // 渲染生效
 	        setTimeout((function () {
-	            _reactLibReactDOM2['default'].findDOMNode(this.refs[this.imgId]).style.transform = this.transform;
+	            var domStyle = _reactLibReactDOM2['default'].findDOMNode(this.refs[this.imgId]).style;
+	            domStyle.WebkitTransform = this.transform;
+	            domStyle.msTransform = this.transform;
+	            domStyle.OTransform = this.transform;
+	            domStyle.transform = this.transform;
 	        }).bind(this));
 	        _eagleUi.Dialog.mask(this.props.id);
 	    };
@@ -377,10 +381,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            style: _extends({
 	                                maxHeight: this.state.maxHeight + 'px',
 	                                maxWidth: this.state.maxWidth + 'px',
-	                                msTransform: this.transform,
 	                                WebkitTransform: this.transform,
-	                                MozTransform: this.transform,
-	                                OTransform: this.transform,
 	                                transform: this.transform }, this.state.modifyImgStyle) })
 	                    )
 	                ),

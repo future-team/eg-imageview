@@ -210,7 +210,11 @@ export default class ImageView extends Component{
         this.transform = `scale(${scaleVal}, ${scaleVal}) rotate(${rotateVal}deg) translate(${diffVal}px, ${diffVal}px)`;
         // 渲染生效
         setTimeout((function () {
-            ReactDom.findDOMNode(this.refs[this.imgId]).style.transform = this.transform;
+            const domStyle = ReactDom.findDOMNode(this.refs[this.imgId]).style;
+            domStyle.WebkitTransform = this.transform;
+            domStyle.msTransform = this.transform;
+            domStyle.OTransform = this.transform;
+            domStyle.transform = this.transform;
         }).bind(this))
         Dialog.mask(this.props.id);
     }
@@ -233,10 +237,7 @@ export default class ImageView extends Component{
                                  style={{
                                     maxHeight: this.state.maxHeight+'px',
                                     maxWidth: this.state.maxWidth+'px',
-                                    msTransform: this.transform,
                                     WebkitTransform: this.transform,
-                                    MozTransform: this.transform,
-                                    OTransform: this.transform,
                                     transform: this.transform,...this.state.modifyImgStyle}} />
                         </Draggable>
                     </div>
