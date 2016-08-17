@@ -197,7 +197,7 @@ export default class Draggable extends Component {
         return {
             'WebkitTransform': value,
             'MozTransform':    value,
-            'MsTransform':     value,
+            'msTransform':     value,
             'OTransform':      value,
             'transform':       value
         }

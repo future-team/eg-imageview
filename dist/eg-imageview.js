@@ -381,7 +381,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            style: _extends({
 	                                maxHeight: this.state.maxHeight + 'px',
 	                                maxWidth: this.state.maxWidth + 'px',
+	                                msTransform: this.transform,
 	                                WebkitTransform: this.transform,
+	                                MozTransform: this.transform,
+	                                OTransform: this.transform,
 	                                transform: this.transform }, this.state.modifyImgStyle) })
 	                    )
 	                ),
@@ -814,7 +817,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	            'WebkitTransform': value,
 	            'MozTransform': value,
-	            'MsTransform': value,
+	            'msTransform': value,
 	            'OTransform': value,
 	            'transform': value
 	        };
