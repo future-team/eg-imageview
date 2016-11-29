@@ -251,7 +251,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                height: 'auto',
 	                width: 'auto'
 	            },
-	            modifyImgStyle: null
+	            modifyImgStyle: null,
+	            activeIndex: nextProps.activeIndex
 	        });
 	    };
 
@@ -376,13 +377,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _eagleUi.Dialog.mask(this.props.id);
 	    };
 
+	    ImageView.prototype.getName = function getName(obj, isFile, index) {
+	        var len = isFile ? obj.file.length : obj.children.length;
+	        if (len == 0) return '图片';
+	        var name = isFile ? obj.file[index].name : obj.children[index].props.name;
+	        return name;
+	    };
+
 	    ImageView.prototype.render = function render() {
 	        var _context,
 	            _this = this;
 
+	        var isFile = !!this.props.children ? false : true;
+	        this.name = this.getName(this.props, isFile, this.state.activeIndex);
 	        return _react2['default'].createElement(
 	            _eagleUi.Dialog,
-	            _extends({ id: this.props.id, isClose: true, isMask: this.props.isMask, title: this.state.name }, this.props),
+	            _extends({ id: this.props.id, isClose: true, isMask: this.props.isMask, title: this.name }, this.props),
 	            _react2['default'].createElement(
 	                'div',
 	                null,
@@ -397,7 +407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        { ref: function (draggable) {
 	                                _this.draggable = draggable;
 	                            } },
-	                        this.renderContent()
+	                        this.renderContent(isFile)
 	                    )
 	                ),
 	                _react2['default'].createElement(
@@ -420,7 +430,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'max'), className: 'upload-icon', name: 'add',
 	                        alt: '放大' }),
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'min'), className: 'upload-icon', name: 'remove',
-	                        alt: '缩小' })
+	                        alt: '缩小' }),
+	                    _react2['default'].createElement(
+	                        'div',
+	                        { className: 'tip-num' },
+	                        _react2['default'].createElement(
+	                            'label',
+	                            { className: 'red-txt' },
+	                            this.state.activeIndex + 1
+	                        ),
+	                        _react2['default'].createElement(
+	                            'label',
+	                            { className: 'mar-5' },
+	                            '/'
+	                        ),
+	                        _react2['default'].createElement(
+	                            'label',
+	                            { className: 'white-txt' },
+	                            this.totalImg
+	                        )
+	                    )
 	                )
 	            )
 	        );
@@ -490,7 +519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                ref: _this3.imgId + index,
 	                key: index,
 	                src: options.props.url, alt: '',
-	                className: _this3.state.activeIndex == index ? '' : 'hide',
+	                className: _this3.state.activeIndex == index ? 'img_show' : 'img_hide',
 	                style: _extends({
 	                    maxHeight: _this3.state.maxHeight + 'px',
 	                    maxWidth: _this3.state.maxWidth + 'px',
@@ -509,9 +538,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var num = dir == 'left' ? index > 0 ? index - 1 : index : index < max ? index * 1 + 1 : index;
 	        //debugger
 	        var imgSize = this.imgSizes[num];
+	        this.name = this.totalName[num];
 	        this.setState({
 	            activeIndex: num,
-	            name: this.totalName[num],
+	            //name:this.totalName[num],
 	            imgWrap: {
 	                width: imgSize.width,
 	                height: imgSize.height
@@ -1158,7 +1188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.img-wrap .img_hide {\n  visibility: hidden;\n  position: absolute;\n  z-index: -999;\n  top: 999px;\n  left: 999px;\n}\n.img-wrap .img_show {\n  visibility: visible;\n}\n", ""]);
+	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.tip-num {\n  display: inline-block;\n  margin-left: 15px;\n  font-size: 16px;\n}\n.tip-num .red-txt {\n  color: red;\n}\n.tip-num .mar-5 {\n  color: white;\n  margin: 0 5px;\n}\n.tip-num .white-txt {\n  color: white;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.img-wrap .img_hide {\n  visibility: hidden;\n  position: absolute;\n  z-index: -999;\n  top: 999px;\n  left: 999px;\n}\n.img-wrap .img_show {\n  visibility: visible;\n}\n.img-wrap .red-txt {\n  color: red;\n}\n", ""]);
 
 	// exports
 

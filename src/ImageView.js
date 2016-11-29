@@ -243,10 +243,17 @@ export default class ImageView extends Component {
         }).bind(this))
         Dialog.mask(this.props.id);
     }
-
+    getName(obj,isFile,index){
+        let len = isFile?obj.file.length:obj.children.length;
+        if(len == 0) return '图片';
+        let name = isFile ? obj.file[index].name :obj.children[index].props.name;
+        return name;
+    }
     render() {
+        let isFile = !!this.props.children ? false : true;
+        this.name = this.getName(this.props,isFile,this.state.activeIndex);
         return (
-            <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.state.name || '图片'}  {...this.props}>
+            <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.name}  {...this.props}>
                 <div>
                     <div className={"img-wrap "+ (this.props.overflow? 'img-wrap-hidden':'img-wrap-show')}
                          style={{
@@ -255,7 +262,7 @@ export default class ImageView extends Component {
                         <Draggable ref={(draggable)=>{
                             this.draggable = draggable;
                         }}>
-                            {this.renderContent()}
+                            {this.renderContent(isFile)}
                         </Draggable>
                     </div>
                     <div className='icon-side left-15'>
@@ -273,6 +280,11 @@ export default class ImageView extends Component {
                               alt="放大"></Icon>
                         <Icon onClick={::this.cssEnhance.bind(this,'min')} className="upload-icon" name="remove"
                               alt="缩小"></Icon>
+                        <div className='tip-num'>
+                            <label className='red-txt'>{this.state.activeIndex+1}</label>
+                            <label className='mar-5'>/</label>
+                            <label className='white-txt'>{this.totalImg}</label>
+                        </div>
                     </div>
                 </div>
             </Dialog>
@@ -351,9 +363,10 @@ export default class ImageView extends Component {
         let num = dir == 'left' ? ( index > 0 ? index - 1 : index) : (index < max ? index*1 + 1 : index);
         //debugger
         let imgSize = this.imgSizes[num];
+        this.name = this.totalName[num];
         this.setState({
             activeIndex: num,
-            name:this.totalName[num],
+            //name:this.totalName[num],
             imgWrap: {
                 width: imgSize.width,
                 height: imgSize.height
