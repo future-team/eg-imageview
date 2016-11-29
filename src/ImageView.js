@@ -109,11 +109,6 @@ export default class ImageView extends Component {
             name:this.totalName[this.state.activeIndex]
         });
     }
-    componentDidUpdate(){
-        this.setState({
-            name:this.totalName[this.state.activeIndex]
-        });
-    }
     componentWillUnmount() {
 
     }
@@ -125,7 +120,8 @@ export default class ImageView extends Component {
                 height: 'auto',
                 width: 'auto'
             },
-            modifyImgStyle: null
+            modifyImgStyle: null,
+            activeIndex:nextProps.activeIndex
         })
     }
     /**
@@ -250,7 +246,7 @@ export default class ImageView extends Component {
 
     render() {
         return (
-            <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.state.name}  {...this.props}>
+            <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.state.name || '图片'}  {...this.props}>
                 <div>
                     <div className={"img-wrap "+ (this.props.overflow? 'img-wrap-hidden':'img-wrap-show')}
                          style={{
@@ -300,7 +296,7 @@ export default class ImageView extends Component {
      * render with file arrtibute
      * */
     renderFile(file) {
-        debugger
+        //debugger
         let files = !isArray(file) ? toArray(file) : file;
         this.totalImg = files.length;
         this.totalName = [];
@@ -337,7 +333,7 @@ export default class ImageView extends Component {
                         ref={this.imgId+index}
                         key={index}
                         src={options.props.url} alt=""
-                        className={this.state.activeIndex == index ?'':'hide'}
+                        className={this.state.activeIndex == index ?'img_show':'img_hide'}
                         style={{
                                     maxHeight: this.state.maxHeight+'px',
                                     maxWidth: this.state.maxWidth+'px',

@@ -7,30 +7,23 @@ class Demo extends  Component {
     constructor(props){
         super(props)
         this.state = {
+            file: [],
+            activeIndex:0
+        }
+    }
+    show() {
+        const index = parseInt(Math.random() * 20) % 10 || 1;
+        this.setState({
             file: [{
                 name: 'demo',
                 url: `./src/1.jpg`
             },{
                 name: 'demo2',
                 url: `./src/2.jpg`
-            },{
-                name: 'demo3',
-                url: `./src/3.jpg`
-            }]
-        }
-    }
-    show() {
-        const index = parseInt(Math.random() * 20) % 10 || 1;
-        /*this.setState({
-            file: [{
-                name: 'demo',
-                url: `./src/${index}.jpg`
-            },{
-                name: 'demo2',
-                url: `./src/${index+1}.jpg`
             }
-            ]
-        })*/
+            ],
+            activeIndex:1
+        })
         Dialog.mask('testIamgeView');
         //Dialog.mask('testIamgeView1');
       /*  <ImageView id="testIamgeView1" activeIndex={0} isMask={false}>
@@ -43,7 +36,7 @@ class Demo extends  Component {
         return (
             <div>
                 <Button onClick={::this.show}>点击我显示图片预览</Button>
-                <ImageView id="testIamgeView" file={this.state.file} activeIndex={0}/>
+                <ImageView id="testIamgeView" file={this.state.file} activeIndex={this.state.activeIndex}/>
 
             </div>
         )
