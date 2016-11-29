@@ -130,6 +130,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _cssImageviewLess2 = _interopRequireDefault(_cssImageviewLess);
 
+	var _utils = __webpack_require__(10);
+
 	var ImageView = (function (_Component) {
 	    _inherits(ImageView, _Component);
 
@@ -160,7 +162,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                name: '',
 	                url: ''
 	            },
-	            id: ''
+	            id: '',
+	            isMask: 'true'
 	        },
 	        enumerable: true
 	    }]);
@@ -169,9 +172,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, ImageView);
 
 	        _Component.call(this, props, context);
-
 	        //this.imageSliderId = this.uniqueId();
 	        this.imgId = this.uniqueId();
+	        //default total 1
+	        this.totalImg = 1;
+	        //imgs sizes
+	        this.imgSizes = [];
 	        this.transform = 'scale(1, 1) rotate(0deg)';
 	        this.state = {
 	            maxHeight: document.documentElement.clientHeight * 1 - 100,
@@ -180,14 +186,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	                height: 'auto',
 	                width: 'auto'
 	            },
-	            modifyImgStyle: null
+	            modifyImgStyle: null,
+	            activeIndex: this.props.activeIndex,
+	            name: '图片'
 	        };
 	    }
 
 	    /*static show(){
-	        this.transform = 'scale(1, 1) rotate(0deg)';
-	         Dialog.mask(this.imageSliderId);
-	    }*/
+	     this.transform = 'scale(1, 1) rotate(0deg)';
+	      Dialog.mask(this.imageSliderId);
+	     }*/
 
 	    ImageView.prototype.cssEnhance = function cssEnhance(type) {
 	        var val = this.transform.match(/-?\d+\.?\d*/g);
@@ -216,15 +224,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    ImageView.prototype.handleResize = function handleResize() {
-	        // TODO
-	        // this.setState({
-	        //     maxHeight: (document.documentElement.clientHeight*1-100),
-	        //     maxWidth: (document.documentElement.clientWidth*1-100),
-	        // })
-	    };
+	    ImageView.prototype.handleResize = function handleResize() {}
+	    // TODO
+	    // this.setState({
+	    //     maxHeight: (document.documentElement.clientHeight*1-100),
+	    //     maxWidth: (document.documentElement.clientWidth*1-100),
+	    // })
 
-	    ImageView.prototype.componentDidMount = function componentDidMount() {};
+	    /**
+	     * first setName
+	     * */
+	    ;
+
+	    ImageView.prototype.componentDidMount = function componentDidMount() {
+	        this.setState({
+	            name: this.totalName[this.state.activeIndex]
+	        });
+	    };
 
 	    ImageView.prototype.componentWillUnmount = function componentWillUnmount() {};
 
@@ -239,15 +255,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 
-	    ImageView.prototype.onLoadHandler = function onLoadHandler(e) {
+	    /**
+	     * 不再onload的时候加载
+	     * 而是改变hide时
+	     * */
+
+	    ImageView.prototype.onLoadHandler = function onLoadHandler(index, e) {
 	        // 获取首次加载图片的大小
-	        this.imgSize = _eagleUiLibUtilsDom2['default'](e.target).offset(); //.getBoundingClientRect();
-	        this.setState({
-	            imgWrap: {
-	                width: this.imgSize.width,
-	                height: this.imgSize.height
-	            }
-	        });
+	        var imgSize = _eagleUiLibUtilsDom2['default'](e.target).offset(); //.getBoundingClientRect();
+	        this.imgSizes.push(imgSize);
+	        if (index == this.state.activeIndex) {
+	            this.setState({
+	                imgWrap: {
+	                    width: imgSize.width,
+	                    height: imgSize.height
+	                }
+	            });
+	        }
 	    };
 
 	    ImageView.prototype.getDeg = function getDeg(deg) {
@@ -280,6 +304,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var scaleVal = vals[0] * 1 + zoom;
 	        var rotateVal = vals[2] * 1 + rotate;
 	        var diff = vals[3] || vals[4] || 0;
+	        var imgSize = this.imgSizes[this.state.activeIndex];
 	        if (type == 'rotate') {
 	            var tx = this.getDeg(rotateVal);
 	            if (tx == 0) {
@@ -288,14 +313,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                // 正常的显示
 	                this.setState({
 	                    imgWrap: {
-	                        width: this.imgSize.width,
-	                        height: this.imgSize.height
+	                        width: imgSize.width,
+	                        height: imgSize.height
 	                    },
 	                    modifyImgStyle: null
 	                });
 	            } else {
 	                // 图片的宽高比
-	                var imgScaleHW = this.imgSize.width / this.imgSize.height;
+	                var imgScaleHW = imgSize.width / imgSize.height;
 	                var iH = this.state.imgWrap.height;
 	                var iW = this.state.imgWrap.width;
 	                var mW = this.state.maxWidth;
@@ -342,7 +367,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.transform = 'scale(' + scaleVal + ', ' + scaleVal + ') rotate(' + rotateVal + 'deg) translate(' + diffVal + 'px, ' + diffVal + 'px)';
 	        // 渲染生效
 	        setTimeout((function () {
-	            var domStyle = _reactLibReactDOM2['default'].findDOMNode(this.refs[this.imgId]).style;
+	            var domStyle = _reactLibReactDOM2['default'].findDOMNode(this.refs[this.imgId + this.state.activeIndex]).style;
 	            domStyle.WebkitTransform = this.transform;
 	            domStyle.msTransform = this.transform;
 	            domStyle.OTransform = this.transform;
@@ -355,11 +380,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _context,
 	            _this = this;
 
-	        var file = this.props.file;
-
 	        return _react2['default'].createElement(
 	            _eagleUi.Dialog,
-	            _extends({ id: this.props.id, isClose: true, isMask: true, title: file.name || '' }, this.props),
+	            _extends({ id: this.props.id, isClose: true, isMask: this.props.isMask, title: this.state.name }, this.props),
 	            _react2['default'].createElement(
 	                'div',
 	                null,
@@ -374,29 +397,127 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        { ref: function (draggable) {
 	                                _this.draggable = draggable;
 	                            } },
-	                        _react2['default'].createElement('img', { draggable: 'false', id: this.imgId,
-	                            onLoad: this.onLoadHandler.bind(this),
-	                            ref: this.imgId,
-	                            src: file.url, alt: '',
-	                            style: _extends({
-	                                maxHeight: this.state.maxHeight + 'px',
-	                                maxWidth: this.state.maxWidth + 'px',
-	                                msTransform: this.transform,
-	                                WebkitTransform: this.transform,
-	                                MozTransform: this.transform,
-	                                OTransform: this.transform,
-	                                transform: this.transform }, this.state.modifyImgStyle) })
+	                        this.renderContent()
 	                    )
 	                ),
 	                _react2['default'].createElement(
 	                    'div',
+	                    { className: 'icon-side left-15' },
+	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.countIndex).bind.call(_context, this, 'left'), className: 'upload-icon',
+	                        name: 'chevron_left' })
+	                ),
+	                _react2['default'].createElement(
+	                    'div',
+	                    { className: 'icon-side right-15' },
+	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.countIndex).bind.call(_context, this, 'right'), className: 'upload-icon',
+	                        name: 'chevron_right' })
+	                ),
+	                _react2['default'].createElement(
+	                    'div',
 	                    { className: 'icon-box' },
-	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'rotate'), className: 'upload-icon', name: 'radio_unchecked', alt: '旋转' }),
-	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'max'), className: 'upload-icon', name: 'add', alt: '放大' }),
-	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'min'), className: 'upload-icon', name: 'remove', alt: '缩小' })
+	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'rotate'), className: 'upload-icon',
+	                        name: 'radio_unchecked', alt: '旋转' }),
+	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'max'), className: 'upload-icon', name: 'add',
+	                        alt: '放大' }),
+	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'min'), className: 'upload-icon', name: 'remove',
+	                        alt: '缩小' })
 	                )
 	            )
 	        );
+	    };
+
+	    /**
+	     * 渲染多图情况
+	     * */
+
+	    ImageView.prototype.renderContent = function renderContent() {
+	        var _props = this.props;
+	        var children = _props.children;
+	        var file = _props.file;
+
+	        var content = !!children ? this.renderChild() : this.renderFile(file);
+	        return _react2['default'].createElement(
+	            'div',
+	            null,
+	            content
+	        );
+	    };
+
+	    /**
+	     * render with file arrtibute
+	     * */
+
+	    ImageView.prototype.renderFile = function renderFile(file) {
+	        var _this2 = this;
+
+	        //debugger
+	        var files = !_utils.isArray(file) ? _utils.toArray(file) : file;
+	        this.totalImg = files.length;
+	        this.totalName = [];
+	        var content = files.map(function (options, index) {
+	            _this2.totalName.push(options.name);
+	            return _react2['default'].createElement('img', { draggable: 'false', id: _this2.imgId + index,
+	                onLoad: _this2.onLoadHandler.bind(_this2, index),
+	                ref: _this2.imgId + index,
+	                key: index,
+	                src: options.url, alt: '',
+	                className: _this2.state.activeIndex == index ? 'img_show' : 'img_hide',
+	                style: _extends({
+	                    maxHeight: _this2.state.maxHeight + 'px',
+	                    maxWidth: _this2.state.maxWidth + 'px',
+	                    msTransform: _this2.transform,
+	                    WebkitTransform: _this2.transform,
+	                    MozTransform: _this2.transform,
+	                    OTransform: _this2.transform,
+	                    transform: _this2.transform }, _this2.state.modifyImgStyle) });
+	        });
+	        return content;
+	    };
+
+	    /**
+	     * render with children
+	     * */
+
+	    ImageView.prototype.renderChild = function renderChild() {
+	        var _this3 = this;
+
+	        this.totalImg = this.props.children.length;
+	        this.totalName = [];
+	        var content = _react2['default'].Children.map(this.props.children, function (options, index) {
+	            _this3.totalName.push(options.props.name);
+	            return _react2['default'].createElement('img', { draggable: 'false', id: _this3.imgId + index,
+	                onLoad: _this3.onLoadHandler.bind(_this3, index),
+	                ref: _this3.imgId + index,
+	                key: index,
+	                src: options.props.url, alt: '',
+	                className: _this3.state.activeIndex == index ? '' : 'hide',
+	                style: _extends({
+	                    maxHeight: _this3.state.maxHeight + 'px',
+	                    maxWidth: _this3.state.maxWidth + 'px',
+	                    msTransform: _this3.transform,
+	                    WebkitTransform: _this3.transform,
+	                    MozTransform: _this3.transform,
+	                    OTransform: _this3.transform,
+	                    transform: _this3.transform }, _this3.state.modifyImgStyle) });
+	        });
+	        return content;
+	    };
+
+	    ImageView.prototype.countIndex = function countIndex(dir) {
+	        var index = parseInt(this.state.activeIndex),
+	            max = this.totalImg - 1;
+	        var num = dir == 'left' ? index > 0 ? index - 1 : index : index < max ? index * 1 + 1 : index;
+	        //debugger
+	        var imgSize = this.imgSizes[num];
+	        this.setState({
+	            activeIndex: num,
+	            name: this.totalName[num],
+	            imgWrap: {
+	                width: imgSize.width,
+	                height: imgSize.height
+	            }
+	        });
+	        _eagleUi.Dialog.mask(this.props.id);
 	    };
 
 	    return ImageView;
@@ -904,6 +1025,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.getTouch = getTouch;
 	exports.getTouchIdentifier = getTouchIdentifier;
 	exports.isNum = isNum;
+	exports.isArray = isArray;
+	exports.toArray = toArray;
 
 	function outerHeight(node) {
 	    // This is deliberately excluding margin for our calculations, since we are using
@@ -990,6 +1113,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return typeof num === 'number' && !isNaN(num);
 	}
 
+	function isArray(obj) {
+	    return obj instanceof Array;
+	}
+
+	function toArray(obj) {
+	    var arr = [];
+	    arr.push(obj);
+	    return arr;
+	}
+
 /***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
@@ -1025,7 +1158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n", ""]);
+	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.img-wrap .img_hide {\n  visibility: hidden;\n  position: absolute;\n  z-index: -999;\n  top: 999px;\n  left: 999px;\n}\n.img-wrap .img_show {\n  visibility: visible;\n}\n", ""]);
 
 	// exports
 

@@ -1,6 +1,8 @@
 # eg-imageview
 
-单张图片预览组件，依赖于eagle-ui组件库。
+单张或多张图片预览组件，依赖于eagle-ui组件库。   
+支持两种方式的参数传递。一是通过file参数，二是以item的数组方式传入
+是否展示遮罩通过isMsk   true或false决定
 
 ## UI展示
 
@@ -8,6 +10,8 @@
 
 ## 使用
 
+*   一、原有通过file参数的方式传入，单个图片支持数组或者对象，多张图片只支持数组。
+    activeIndex，默认显示的图片下标。
 ```js
 
 	import {ImageView} from '../../src/index.js';
@@ -27,12 +31,23 @@
     ReactDom.render(
         <div>
             <Button onClick={show}>点击我显示图片预览</Button>
-            <ImageView id="testIamgeView" file={file} style={{width:'1200px'}} />
+            <ImageView id="testIamgeView" file={this.state.file} activeIndex={0}/>
         </div>,
         document.getElementById('root')
     );
 
-```
+```   
+
+*   二、以子对象的方式传入   
+
+
+`
+     <ImageView id="testIamgeView1" activeIndex={0}>
+                        <item url='./src/3.jpg' name='demo1'></item>
+                        <item url='./src/2.jpg' name='demo2'></item>
+                        <item url='./src/1.jpg' name='demo3'></item>
+                    </ImageView>
+`
 
 ## 示例演示
 
@@ -40,6 +55,8 @@
 
 ## update 
 
+* `version 2.0.8` 支持多图片上下翻页和是否展示遮罩层
 * `version 2.0.1` 支持图片放大后拖动，修复图片旋转后位置错误bug，修复图片拉伸变形
+* `version 2.0.2` 支持多张图片的展示和翻页 
 
 

@@ -38,7 +38,9 @@ export function innerWidth(node) {
 }
 
 export function addEvent(el, event, handler) {
-    if (!el) { return; }
+    if (!el) {
+        return;
+    }
     if (el.attachEvent) {
         el.attachEvent('on' + event, handler);
     } else if (el.addEventListener) {
@@ -49,7 +51,9 @@ export function addEvent(el, event, handler) {
 }
 
 export function removeEvent(el, event, handler) {
-    if (!el) { return; }
+    if (!el) {
+        return;
+    }
     if (el.detachEvent) {
         el.detachEvent('on' + event, handler);
     } else if (el.removeEventListener) {
@@ -59,7 +63,7 @@ export function removeEvent(el, event, handler) {
     }
 }
 
-export function findInArray(array: Array<any>, callback: Function): any {
+export function findInArray(array:Array<any>, callback:Function):any {
     for (let i = 0, length = array.length; i < length; i++) {
         if (callback.apply(callback, [array[i], i, array])) return array[i];
     }
@@ -67,7 +71,7 @@ export function findInArray(array: Array<any>, callback: Function): any {
 
 export function getTouch(e, identifier) {
     return (e.targetTouches && findInArray(e.targetTouches, t => identifier === t.identifier)) ||
-    (e.changedTouches && findInArray(e.changedTouches, t => identifier === t.identifier));
+        (e.changedTouches && findInArray(e.changedTouches, t => identifier === t.identifier));
 }
 
 export function getTouchIdentifier(e) {
@@ -77,4 +81,12 @@ export function getTouchIdentifier(e) {
 
 export function isNum(num) {
     return typeof num === 'number' && !isNaN(num)
+}
+export function isArray(obj) {
+    return obj instanceof Array;
+}
+export function toArray(obj) {
+    let arr = [];
+    arr.push(obj);
+    return arr;
 }
