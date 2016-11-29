@@ -109,7 +109,11 @@ export default class ImageView extends Component {
             name:this.totalName[this.state.activeIndex]
         });
     }
-
+    componentDidUpdate(){
+        this.setState({
+            name:this.totalName[this.state.activeIndex]
+        });
+    }
     componentWillUnmount() {
 
     }
@@ -296,7 +300,7 @@ export default class ImageView extends Component {
      * render with file arrtibute
      * */
     renderFile(file) {
-        //debugger
+        debugger
         let files = !isArray(file) ? toArray(file) : file;
         this.totalImg = files.length;
         this.totalName = [];
