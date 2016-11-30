@@ -101,13 +101,8 @@ export default class ImageView extends Component {
         //     maxWidth: (document.documentElement.clientWidth*1-100),
         // })
     }
-    /**
-     * first setName
-     * */
+
     componentDidMount() {
-        this.setState({
-            name:this.totalName[this.state.activeIndex]
-        });
     }
     componentWillUnmount() {
 
@@ -115,13 +110,14 @@ export default class ImageView extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.transform = 'scale(1, 1) rotate(0deg)';
+        let index = nextProps.activeIndex;
         this.setState({
             imgWrap: {
                 height: 'auto',
                 width: 'auto'
             },
             modifyImgStyle: null,
-            activeIndex:nextProps.activeIndex
+            activeIndex:typeof(index) == 'undefined'? this.state.activeIndex :index
         })
     }
     /**
@@ -246,7 +242,7 @@ export default class ImageView extends Component {
     getName(obj,isFile,index){
         let len = isFile?obj.file.length:obj.children.length;
         if(len == 0) return '图片';
-        if(!index) return '图片';
+        if(typeof(index) == 'undefined') return '图片';
         let name = isFile ? obj.file[index].name :obj.children[index].props.name;
         return name;
     }
@@ -364,7 +360,7 @@ export default class ImageView extends Component {
         let num = dir == 'left' ? ( index > 0 ? index - 1 : index) : (index < max ? index*1 + 1 : index);
         //debugger
         let imgSize = this.imgSizes[num];
-        this.name = this.getName(this.props,this.isFile,this.state.activeIndex);
+        this.name = this.getName(this.props,this.isFile,num);
         this.setState({
             activeIndex: num,
             //name:this.totalName[num],

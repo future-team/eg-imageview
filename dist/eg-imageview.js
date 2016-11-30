@@ -187,7 +187,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                width: 'auto'
 	            },
 	            modifyImgStyle: null,
-	            activeIndex: this.props.activeIndex,
+	            activeIndex: this.props.activeIndex || 0,
 	            name: '图片'
 	        };
 	    }
@@ -224,23 +224,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	    };
 
-	    ImageView.prototype.handleResize = function handleResize() {}
-	    // TODO
-	    // this.setState({
-	    //     maxHeight: (document.documentElement.clientHeight*1-100),
-	    //     maxWidth: (document.documentElement.clientWidth*1-100),
-	    // })
-
-	    /**
-	     * first setName
-	     * */
-	    ;
-
-	    ImageView.prototype.componentDidMount = function componentDidMount() {
-	        this.setState({
-	            name: this.totalName[this.state.activeIndex]
-	        });
+	    ImageView.prototype.handleResize = function handleResize() {
+	        // TODO
+	        // this.setState({
+	        //     maxHeight: (document.documentElement.clientHeight*1-100),
+	        //     maxWidth: (document.documentElement.clientWidth*1-100),
+	        // })
 	    };
+
+	    ImageView.prototype.componentDidMount = function componentDidMount() {};
 
 	    ImageView.prototype.componentWillUnmount = function componentWillUnmount() {};
 
@@ -380,6 +372,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ImageView.prototype.getName = function getName(obj, isFile, index) {
 	        var len = isFile ? obj.file.length : obj.children.length;
 	        if (len == 0) return '图片';
+	        if (index == undefined) return '图片';
 	        var name = isFile ? obj.file[index].name : obj.children[index].props.name;
 	        return name;
 	    };
@@ -388,8 +381,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _context,
 	            _this = this;
 
-	        var isFile = !!this.props.children ? false : true;
-	        this.name = this.getName(this.props, isFile, this.state.activeIndex);
+	        this.isFile = !!this.props.children ? false : true;
+	        this.name = this.getName(this.props, this.isFile, this.state.activeIndex);
 	        return _react2['default'].createElement(
 	            _eagleUi.Dialog,
 	            _extends({ id: this.props.id, isClose: true, isMask: this.props.isMask, title: this.name }, this.props),
@@ -407,7 +400,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        { ref: function (draggable) {
 	                                _this.draggable = draggable;
 	                            } },
-	                        this.renderContent(isFile)
+	                        this.renderContent()
 	                    )
 	                ),
 	                _react2['default'].createElement(
@@ -464,7 +457,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var children = _props.children;
 	        var file = _props.file;
 
-	        var content = !!children ? this.renderChild() : this.renderFile(file);
+	        var content = !this.isFile ? this.renderChild() : this.renderFile(file);
 	        return _react2['default'].createElement(
 	            'div',
 	            null,
@@ -482,9 +475,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //debugger
 	        var files = !_utils.isArray(file) ? _utils.toArray(file) : file;
 	        this.totalImg = files.length;
-	        this.totalName = [];
+	        //this.totalName = [];
 	        var content = files.map(function (options, index) {
-	            _this2.totalName.push(options.name);
+	            //this.totalName.push(options.name);
 	            return _react2['default'].createElement('img', { draggable: 'false', id: _this2.imgId + index,
 	                onLoad: _this2.onLoadHandler.bind(_this2, index),
 	                ref: _this2.imgId + index,
@@ -511,9 +504,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this3 = this;
 
 	        this.totalImg = this.props.children.length;
-	        this.totalName = [];
+	        //this.totalName = [];
 	        var content = _react2['default'].Children.map(this.props.children, function (options, index) {
-	            _this3.totalName.push(options.props.name);
+	            //this.totalName.push(options.props.name);
 	            return _react2['default'].createElement('img', { draggable: 'false', id: _this3.imgId + index,
 	                onLoad: _this3.onLoadHandler.bind(_this3, index),
 	                ref: _this3.imgId + index,
@@ -538,7 +531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var num = dir == 'left' ? index > 0 ? index - 1 : index : index < max ? index * 1 + 1 : index;
 	        //debugger
 	        var imgSize = this.imgSizes[num];
-	        this.name = this.totalName[num];
+	        this.name = this.getName(this.props, this.isFile, num);
 	        this.setState({
 	            activeIndex: num,
 	            //name:this.totalName[num],

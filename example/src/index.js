@@ -11,7 +11,9 @@ class Demo extends  Component {
             activeIndex:0
         }
     }
+
     show() {
+        var a;
         const index = parseInt(Math.random() * 20) % 10 || 1;
         this.setState({
             file: [{
@@ -22,8 +24,21 @@ class Demo extends  Component {
                 url: `./src/2.jpg`
             }
             ],
-            activeIndex:1
+            activeIndex:a
         })
+        setTimeout(()=>{
+            this.setState({
+                file: [{
+                    name: 'demo',
+                    url: `./src/1.jpg`
+                },{
+                    name: 'demo2',
+                    url: `./src/2.jpg`
+                }
+                ],
+                activeIndex:1
+            })
+        },200)
         Dialog.mask('testIamgeView');
         //Dialog.mask('testIamgeView1');
       /*  <ImageView id="testIamgeView1" activeIndex={0} isMask={false}>
