@@ -51,7 +51,7 @@ class Demo extends  Component {
         return (
             <div>
                 <Button onClick={::this.show}>点击我显示图片预览</Button>
-                <ImageView id="testIamgeView" file={this.state.file} activeIndex={this.state.activeIndex}/>
+                <ImageView id="testIamgeView" file={this.state.file} activeIndex={this.state.activeIndex} isMask={false}/>
 
             </div>
         )

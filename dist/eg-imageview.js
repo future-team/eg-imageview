@@ -190,6 +190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            activeIndex: this.props.activeIndex || 0,
 	            name: '图片'
 	        };
+	        this.initLoad = true;
 	    }
 
 	    /*static show(){
@@ -238,19 +239,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    ImageView.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
 	        this.transform = 'scale(1, 1) rotate(0deg)';
+	        var index = nextProps.activeIndex;
 	        this.setState({
 	            imgWrap: {
 	                height: 'auto',
 	                width: 'auto'
 	            },
 	            modifyImgStyle: null,
-	            activeIndex: nextProps.activeIndex
+	            activeIndex: typeof index == 'undefined' ? this.state.activeIndex : index
 	        });
 	    };
 
 	    /**
-	     * 不再onload的时候加载
-	     * 而是改变hide时
+	     * 获取img size
 	     * */
 
 	    ImageView.prototype.onLoadHandler = function onLoadHandler(index, e) {
@@ -265,6 +266,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 	            });
 	        }
+	        //index == this.totalImg && (this.initLoad = false);
 	    };
 
 	    ImageView.prototype.getDeg = function getDeg(deg) {
@@ -372,9 +374,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ImageView.prototype.getName = function getName(obj, isFile, index) {
 	        var len = isFile ? obj.file.length : obj.children.length;
 	        if (len == 0) return '图片';
-	        if (index == undefined) return '图片';
+	        if (typeof index == 'undefined') return '图片';
 	        var name = isFile ? obj.file[index].name : obj.children[index].props.name;
 	        return name;
+	    };
+
+	    ImageView.prototype.getClass = function getClass(index, activeIndex) {
+	        return index == activeIndex ? 'img_show' : 'img_hide';
 	    };
 
 	    ImageView.prototype.render = function render() {
@@ -475,15 +481,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //debugger
 	        var files = !_utils.isArray(file) ? _utils.toArray(file) : file;
 	        this.totalImg = files.length;
-	        //this.totalName = [];
 	        var content = files.map(function (options, index) {
-	            //this.totalName.push(options.name);
 	            return _react2['default'].createElement('img', { draggable: 'false', id: _this2.imgId + index,
 	                onLoad: _this2.onLoadHandler.bind(_this2, index),
 	                ref: _this2.imgId + index,
 	                key: index,
 	                src: options.url, alt: '',
-	                className: _this2.state.activeIndex == index ? 'img_show' : 'img_hide',
+	                className: _this2.getClass(index, _this2.state.activeIndex),
 	                style: _extends({
 	                    maxHeight: _this2.state.maxHeight + 'px',
 	                    maxWidth: _this2.state.maxWidth + 'px',
@@ -504,15 +508,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this3 = this;
 
 	        this.totalImg = this.props.children.length;
-	        //this.totalName = [];
 	        var content = _react2['default'].Children.map(this.props.children, function (options, index) {
-	            //this.totalName.push(options.props.name);
 	            return _react2['default'].createElement('img', { draggable: 'false', id: _this3.imgId + index,
 	                onLoad: _this3.onLoadHandler.bind(_this3, index),
 	                ref: _this3.imgId + index,
 	                key: index,
 	                src: options.props.url, alt: '',
-	                className: _this3.state.activeIndex == index ? 'img_show' : 'img_hide',
+	                className: _this3.getClass(index, _this3.state.activeIndex),
 	                style: _extends({
 	                    maxHeight: _this3.state.maxHeight + 'px',
 	                    maxWidth: _this3.state.maxWidth + 'px',
@@ -1181,7 +1183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.tip-num {\n  display: inline-block;\n  margin-left: 15px;\n  font-size: 16px;\n}\n.tip-num .red-txt {\n  color: red;\n}\n.tip-num .mar-5 {\n  color: white;\n  margin: 0 5px;\n}\n.tip-num .white-txt {\n  color: white;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.img-wrap .img_hide {\n  visibility: hidden;\n  position: absolute;\n  z-index: -999;\n  top: 999px;\n  left: 999px;\n}\n.img-wrap .img_show {\n  visibility: visible;\n}\n.img-wrap .red-txt {\n  color: red;\n}\n", ""]);
+	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.tip-num {\n  display: inline-block;\n  margin-left: 15px;\n  font-size: 16px;\n}\n.tip-num .red-txt {\n  color: red;\n}\n.tip-num .mar-5 {\n  color: white;\n  margin: 0 5px;\n}\n.tip-num .white-txt {\n  color: white;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.img-wrap .img_hide {\n  visibility: hidden;\n  position: absolute;\n  z-index: -999;\n  top: 9999px;\n  left: 9999px;\n}\n.img-wrap .img_show {\n  display: block;\n}\n.img-wrap .red-txt {\n  color: red;\n}\n", ""]);
 
 	// exports
 

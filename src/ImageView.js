@@ -62,6 +62,7 @@ export default class ImageView extends Component {
             activeIndex: this.props.activeIndex || 0,
             name:'图片'
         }
+        this.initLoad = true;
     }
 
     /*static show(){
@@ -121,8 +122,7 @@ export default class ImageView extends Component {
         })
     }
     /**
-     * 不再onload的时候加载
-     * 而是改变hide时
+     * 获取img size
      * */
     onLoadHandler(index,e) {
         // 获取首次加载图片的大小
@@ -136,7 +136,7 @@ export default class ImageView extends Component {
                 }
             })
         }
-
+        //index == this.totalImg && (this.initLoad = false);
     }
 
     getDeg(deg) {
@@ -246,6 +246,9 @@ export default class ImageView extends Component {
         let name = isFile ? obj.file[index].name :obj.children[index].props.name;
         return name;
     }
+    getClass(index,activeIndex){
+        return index == activeIndex ? 'img_show':'img_hide';
+    }
     render() {
         this.isFile = !!this.props.children ? false : true;
         this.name = this.getName(this.props,this.isFile,this.state.activeIndex);
@@ -308,15 +311,13 @@ export default class ImageView extends Component {
         //debugger
         let files = !isArray(file) ? toArray(file) : file;
         this.totalImg = files.length;
-        //this.totalName = [];
         let content = files.map((options, index)=> {
-            //this.totalName.push(options.name);
             return <img draggable="false" id={this.imgId+index}
                         onLoad={this.onLoadHandler.bind(this,index)}
                         ref={this.imgId+index}
                         key={index}
                         src={options.url} alt=""
-                        className={this.state.activeIndex == index ?'img_show':'img_hide'}
+                        className={this.getClass(index,this.state.activeIndex)}
                         style={{
                                     maxHeight: this.state.maxHeight+'px',
                                     maxWidth: this.state.maxWidth+'px',
@@ -334,15 +335,13 @@ export default class ImageView extends Component {
      * */
     renderChild() {
         this.totalImg = this.props.children.length;
-        //this.totalName = [];
         let content = React.Children.map(this.props.children,(options, index)=> {
-            //this.totalName.push(options.props.name);
             return <img draggable="false" id={this.imgId+index}
                         onLoad={this.onLoadHandler.bind(this,index)}
                         ref={this.imgId+index}
                         key={index}
                         src={options.props.url} alt=""
-                        className={this.state.activeIndex == index ?'img_show':'img_hide'}
+                        className={this.getClass(index,this.state.activeIndex)}
                         style={{
                                     maxHeight: this.state.maxHeight+'px',
                                     maxWidth: this.state.maxWidth+'px',
