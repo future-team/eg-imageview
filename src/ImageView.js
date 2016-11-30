@@ -59,7 +59,7 @@ export default class ImageView extends Component {
                 width: 'auto'
             },
             modifyImgStyle: null,
-            activeIndex: this.props.activeIndex,
+            activeIndex: this.props.activeIndex || 0,
             name:'图片'
         }
     }
@@ -246,12 +246,13 @@ export default class ImageView extends Component {
     getName(obj,isFile,index){
         let len = isFile?obj.file.length:obj.children.length;
         if(len == 0) return '图片';
+        if(!index) return '图片';
         let name = isFile ? obj.file[index].name :obj.children[index].props.name;
         return name;
     }
     render() {
-        let isFile = !!this.props.children ? false : true;
-        this.name = this.getName(this.props,isFile,this.state.activeIndex);
+        this.isFile = !!this.props.children ? false : true;
+        this.name = this.getName(this.props,this.isFile,this.state.activeIndex);
         return (
             <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.name}  {...this.props}>
                 <div>
@@ -262,7 +263,7 @@ export default class ImageView extends Component {
                         <Draggable ref={(draggable)=>{
                             this.draggable = draggable;
                         }}>
-                            {this.renderContent(isFile)}
+                            {this.renderContent()}
                         </Draggable>
                     </div>
                     <div className='icon-side left-15'>
@@ -296,7 +297,7 @@ export default class ImageView extends Component {
      * */
     renderContent() {
         let {children,file} = this.props;
-        let content = !!children ? this.renderChild() : this.renderFile(file);
+        let content = !this.isFile ? this.renderChild() : this.renderFile(file);
         return (
             <div>
                 {content}
@@ -311,9 +312,9 @@ export default class ImageView extends Component {
         //debugger
         let files = !isArray(file) ? toArray(file) : file;
         this.totalImg = files.length;
-        this.totalName = [];
+        //this.totalName = [];
         let content = files.map((options, index)=> {
-            this.totalName.push(options.name);
+            //this.totalName.push(options.name);
             return <img draggable="false" id={this.imgId+index}
                         onLoad={this.onLoadHandler.bind(this,index)}
                         ref={this.imgId+index}
@@ -337,9 +338,9 @@ export default class ImageView extends Component {
      * */
     renderChild() {
         this.totalImg = this.props.children.length;
-        this.totalName = [];
+        //this.totalName = [];
         let content = React.Children.map(this.props.children,(options, index)=> {
-            this.totalName.push(options.props.name);
+            //this.totalName.push(options.props.name);
             return <img draggable="false" id={this.imgId+index}
                         onLoad={this.onLoadHandler.bind(this,index)}
                         ref={this.imgId+index}
@@ -363,7 +364,7 @@ export default class ImageView extends Component {
         let num = dir == 'left' ? ( index > 0 ? index - 1 : index) : (index < max ? index*1 + 1 : index);
         //debugger
         let imgSize = this.imgSizes[num];
-        this.name = this.totalName[num];
+        this.name = this.getName(this.props,this.isFile,this.state.activeIndex);
         this.setState({
             activeIndex: num,
             //name:this.totalName[num],
