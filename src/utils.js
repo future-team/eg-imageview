@@ -90,3 +90,6 @@ export function toArray(obj) {
     arr.push(obj);
     return arr;
 }
+export function isValidNum(index,min,max){
+    return index >= min ? (index <= max ? true:false):false;
+}

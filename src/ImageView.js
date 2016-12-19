@@ -34,12 +34,34 @@ export default class ImageView extends Component {
 
     static defaultProps = {
         componentTag: 'div',
+        /**
+         * @param file
+         * 图片参数数组
+         * @default []
+         * */
         file: {
             name: '',
             url: ''
         },
         id: '',
-        isMask:'true'
+        /**
+         * @param isMask
+         * 是显示遮罩层
+         * @default true
+         * */
+        isMask: true,
+        /**
+         * @param isLoop
+         * 是否循环播放
+         * @default true
+         * */
+        isLoop: true,
+        /**
+         * @param activeIndex
+         * 当前展示图片下标
+         * @default 0
+         * */
+        activeIndex: 0
     };
 
     constructor(props, context) {
@@ -47,7 +69,7 @@ export default class ImageView extends Component {
         //this.imageSliderId = this.uniqueId();
         this.imgId = this.uniqueId();
         //default total 1
-        this.totalImg = 1;
+        this.totalNum = 1;
         //imgs sizes
         this.imgSizes = [];
         this.transform = 'scale(1, 1) rotate(0deg)';
@@ -58,19 +80,17 @@ export default class ImageView extends Component {
                 height: 'auto',
                 width: 'auto'
             },
-            modifyImgStyle: null,
             activeIndex: this.props.activeIndex || 0,
-            name:'图片'
+            name: '图片',
+            dirClass: 'left0',
+            sizeChange: false
         }
-        this.initLoad = true;
+        this.initSize = {
+            height: 'auto',
+            width: 'auto'
+        };
+        this.isLoop = this.props.isLoop;
     }
-
-    /*static show(){
-     this.transform = 'scale(1, 1) rotate(0deg)';
-
-     Dialog.mask(this.imageSliderId);
-     }*/
-
     cssEnhance(type) {
         const val = this.transform.match(/-?\d+\.?\d*/g);
         if (val && val.length >= 3) {
@@ -94,21 +114,6 @@ export default class ImageView extends Component {
             this.calculatePosition(zoom, rotate, type);
         }
     }
-
-    handleResize() {
-        // TODO
-        // this.setState({
-        //     maxHeight: (document.documentElement.clientHeight*1-100),
-        //     maxWidth: (document.documentElement.clientWidth*1-100),
-        // })
-    }
-
-    componentDidMount() {
-    }
-    componentWillUnmount() {
-
-    }
-
     componentWillReceiveProps(nextProps) {
         this.transform = 'scale(1, 1) rotate(0deg)';
         let index = nextProps.activeIndex;
@@ -117,26 +122,23 @@ export default class ImageView extends Component {
                 height: 'auto',
                 width: 'auto'
             },
-            modifyImgStyle: null,
-            activeIndex:typeof(index) == 'undefined'? this.state.activeIndex :index
+            activeIndex: typeof(index) == 'undefined' ? this.state.activeIndex : index
         })
+        this.isLoop = nextProps.isLoop;
     }
+
     /**
-     * 获取img size
+     * 获取img size & reset
      * */
-    onLoadHandler(index,e) {
-        // 获取首次加载图片的大小
-        let imgSize = Dom(e.target).offset()//.getBoundingClientRect();
-        this.imgSizes.push(imgSize);
-        if(index == this.state.activeIndex){
-            this.setState({
-                imgWrap: {
-                    width: imgSize.width,
-                    height: imgSize.height
-                }
-            })
-        }
-        //index == this.totalImg && (this.initLoad = false);
+    onLoadHandler(e) {
+        // 获取加载图片的大小
+        this.imgSize = this.getImgSize(this.state.activeIndex);
+        let size = this.imgSize;
+        this.setState({
+            imgWrap: size
+        })
+        //reset
+        this.transform = 'scale(1, 1) rotate(0deg)';
     }
 
     getDeg(deg) {
@@ -168,7 +170,7 @@ export default class ImageView extends Component {
         const scaleVal = vals[0] * 1 + zoom;
         const rotateVal = vals[2] * 1 + rotate;
         let diff = vals[3] || vals[4] || 0;
-        let imgSize = this.imgSizes[this.state.activeIndex];
+        let imgSize = this.imgSize;
         if (type == 'rotate') {
             const tx = this.getDeg(rotateVal);
             if (tx == 0) {
@@ -179,8 +181,7 @@ export default class ImageView extends Component {
                     imgWrap: {
                         width: imgSize.width,
                         height: imgSize.height
-                    },
-                    modifyImgStyle: null
+                    }
                 })
             } else {
                 // 图片的宽高比
@@ -204,17 +205,14 @@ export default class ImageView extends Component {
                 this.setState({
                     imgWrap: {
                         width: iH,
-                        height: iW,
-                    },
-                    modifyImgStyle: {
-                        width: iW,
-                        height: iH,
+                        height: iW
                     }
                 })
             }
         } else {
             // 重置拖放的位置
             this.draggable.reset();
+
         }
         let diffVal = diff * 1;
         // 如果为负数的话,图片就旋转了
@@ -231,34 +229,30 @@ export default class ImageView extends Component {
         this.transform = `scale(${scaleVal}, ${scaleVal}) rotate(${rotateVal}deg) translate(${diffVal}px, ${diffVal}px)`;
         // 渲染生效
         setTimeout((function () {
-            const domStyle = ReactDom.findDOMNode(this.refs[this.imgId + this.state.activeIndex]).style;
+            const domStyle = ReactDom.findDOMNode(this.refs[this.imgId]).style;
             domStyle.WebkitTransform = this.transform;
             domStyle.msTransform = this.transform;
             domStyle.OTransform = this.transform;
             domStyle.transform = this.transform;
-        }).bind(this))
-        Dialog.mask(this.props.id);
+        }).bind(this));
+        this.setState({
+            sizeChange: true
+        })
+        //Dialog.mask(this.props.id);
     }
-    getName(obj,isFile,index){
-        let len = isFile?obj.file.length:obj.children.length;
-        if(len == 0) return '图片';
-        if(typeof(index) == 'undefined') return '图片';
-        let name = isFile ? obj.file[index].name :obj.children[index].props.name;
-        return name;
-    }
-    getClass(index,activeIndex){
-        return index == activeIndex ? 'img_show':'img_hide';
-    }
+
     render() {
         this.isFile = !!this.props.children ? false : true;
-        this.name = this.getName(this.props,this.isFile,this.state.activeIndex);
+        this.name = this.getImgName(this.state.activeIndex);
+        this.totalNum = this.getFileLength();
         return (
-            <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.name}  {...this.props}>
-                <div>
+            <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.name} {...this.props} >
+                <div className='img-hover'>
                     <div className={"img-wrap "+ (this.props.overflow? 'img-wrap-hidden':'img-wrap-show')}
                          style={{
                             height: this.state.imgWrap.height,
-                            width: this.state.imgWrap.width}}>
+                            width: this.state.imgWrap.width
+                            }}>
                         <Draggable ref={(draggable)=>{
                             this.draggable = draggable;
                         }}>
@@ -280,10 +274,11 @@ export default class ImageView extends Component {
                               alt="放大"></Icon>
                         <Icon onClick={::this.cssEnhance.bind(this,'min')} className="upload-icon" name="remove"
                               alt="缩小"></Icon>
+
                         <div className='tip-num'>
-                            <label className='red-txt'>{this.state.activeIndex+1}</label>
+                            <label className='red-txt'>{this.state.activeIndex + 1}</label>
                             <label className='mar-5'>/</label>
-                            <label className='white-txt'>{this.totalImg}</label>
+                            <label className='white-txt'>{this.totalNum}</label>
                         </div>
                     </div>
                 </div>
@@ -292,82 +287,169 @@ export default class ImageView extends Component {
     }
 
     /**
+     * 放大或者拖动时不需要overHidden
+     * */
+    isOverHide() {
+        return this.state.sizeChange ? '' : 'over-hidden';
+    }
+
+    /**
      * 渲染多图情况
      * */
     renderContent() {
-        let {children,file} = this.props;
-        let content = !this.isFile ? this.renderChild() : this.renderFile(file);
+        let {file} = this.props;
+        let files = !this.isFile ? this.transToFile() : file;
+        this.saveToLocal(files);
         return (
             <div>
-                {content}
+                {this.renderImage(this.state.activeIndex)}
             </div>
         )
     }
 
-    /**
-     * render with file arrtibute
-     * */
-    renderFile(file) {
-        //debugger
-        let files = !isArray(file) ? toArray(file) : file;
-        this.totalImg = files.length;
-        let content = files.map((options, index)=> {
-            return <img draggable="false" id={this.imgId+index}
-                        onLoad={this.onLoadHandler.bind(this,index)}
-                        ref={this.imgId+index}
-                        key={index}
-                        src={options.url} alt=""
-                        className={this.getClass(index,this.state.activeIndex)}
-                        style={{
+    renderImage(index) {
+        return <div className={
+                        this.isOverHide()
+                }><img draggable="false" id={this.imgId}
+                       onLoad={this.onLoadHandler.bind(this)}
+                       ref={this.imgId}
+                       className={this.state.dirClass}
+                       src={this.getImgSrc(index)} alt=""
+                       style={{
                                     maxHeight: this.state.maxHeight+'px',
                                     maxWidth: this.state.maxWidth+'px',
                                     msTransform: this.transform,
                                     WebkitTransform: this.transform,
                                     MozTransform: this.transform,
                                     OTransform: this.transform,
-                                    transform: this.transform,...this.state.modifyImgStyle}}/>
-        });
-        return content;
+                                    transform: this.transform}}/>
+        </div>
     }
 
     /**
-     * render with children
+     * transform children to files
      * */
-    renderChild() {
-        this.totalImg = this.props.children.length;
-        let content = React.Children.map(this.props.children,(options, index)=> {
-            return <img draggable="false" id={this.imgId+index}
-                        onLoad={this.onLoadHandler.bind(this,index)}
-                        ref={this.imgId+index}
-                        key={index}
-                        src={options.props.url} alt=""
-                        className={this.getClass(index,this.state.activeIndex)}
-                        style={{
-                                    maxHeight: this.state.maxHeight+'px',
-                                    maxWidth: this.state.maxWidth+'px',
-                                    msTransform: this.transform,
-                                    WebkitTransform: this.transform,
-                                    MozTransform: this.transform,
-                                    OTransform: this.transform,
-                                    transform: this.transform,...this.state.modifyImgStyle}}/>
+    transToFile() {
+        let file = [];
+        React.Children.forEach(this.props.children, (options)=> {
+            file.push({
+                name: options.props.name,
+                url: options.props.url
+            });
         });
-        return content;
+        return file;
     }
+
+    /**
+     * get file info push to local
+     * */
+    saveToLocal(file) {
+        this._file = file;
+    }
+
+    getFileLength() {
+        return this._file ? this._file.length : 0;
+    }
+
+    getImgOpt(index) {
+        let i = this.isValidLength(index, 0, this.getFileLength()) ? index : 0;
+        return this._file ? this._file[i] : undefined;
+    }
+
+    isValidLength(index, min, max) {
+        return index >= min ? (index <= max ? true : false) : false;
+    }
+
+    getImgName(index) {
+        let opt = this.getImgOpt(index);
+        return opt ? opt.name : '图片';
+    }
+
+    getImgSrc(index) {
+        let opt = this.getImgOpt(index);
+        return opt ? opt.url : '';
+    }
+
+    getImgSize(index) {
+        let opt = this.getImgOpt(index),
+            size = this.initSize,
+            tempImg = new Image();
+        if (!opt) return size;
+        tempImg.src = opt.url;
+        size = this.getModifySize(tempImg.width,tempImg.height,this.state.maxWidth,this.state.maxHeight);
+        /*size = {
+            width: tempImg.width,
+            height: tempImg.height
+        };*/
+        return size;
+    }
+
+    isOver(init, max) {
+        return init > max;
+    }
+
+    /**
+     * 是否超出最大宽高
+     *  */
+    getModifySize(initW, initH, maxW, maxH) {
+        let w = this.isOver(initW, maxW),
+            h = this.isOver(initH, maxH),
+            size = {
+                width: initW,
+                height: initH
+            },
+            i = initW / initH;
+        (h || w) && (size = {
+            width: i * maxH,
+            height: maxH
+        });
+        return size;
+    }
+
+    /**
+     * trim imgsize if over maxSize
+     * */
+    getTrimSize() {
+
+    }
+
+    /**
+     * @param isLoop 是否循环
+     * @param cur current index
+     * @param dir next show direction
+     * */
+    getShowNum(cur, dir, isLoop) {
+
+    }
+
     countIndex(dir) {
         let index = parseInt(this.state.activeIndex),
-            max = this.totalImg - 1;
-        let num = dir == 'left' ? ( index > 0 ? index - 1 : index) : (index < max ? index*1 + 1 : index);
-        //debugger
-        let imgSize = this.imgSizes[num];
-        this.name = this.getName(this.props,this.isFile,num);
-        this.setState({
-            activeIndex: num,
-            //name:this.totalName[num],
-            imgWrap: {
-                width: imgSize.width,
-                height: imgSize.height
-            }
-        });
-        Dialog.mask(this.props.id);
+            max = this.totalNum - 1;
+        let dirClass = 'moveLeft',
+            num = index;
+        if (dir == 'left') {
+            index > 0 && ( num = index - 1 );
+            this.isLoop && index == 0 && (num = max);
+        } else {
+            dirClass = 'moveRight';
+            index < max && ( num = index * 1 + 1 );
+            this.isLoop && index == max && (num = 0);
+        }
+        if (num != index) {
+            this.name = this.getImgName(this.props, this.isFile, num);
+            this.imgId = this.uniqueId();
+            this.setState({
+                activeIndex: num,
+                dirClass: dirClass,
+                sizeChange: false
+            }, ()=> {
+                setTimeout(()=> {
+                    this.setState({
+                        dirClass: 'left0'
+                    })
+                }, 10)
+            });
+        }
+
     }
 }

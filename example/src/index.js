@@ -15,7 +15,7 @@ class Demo extends  Component {
     show() {
         var a;
         const index = parseInt(Math.random() * 20) % 10 || 1;
-        this.setState({
+        /*this.setState({
             file: [{
                 name: 'demo',
                 url: `./src/1.jpg`
@@ -25,7 +25,7 @@ class Demo extends  Component {
             }
             ],
             activeIndex:a
-        })
+        })*/
         setTimeout(()=>{
             this.setState({
                 file: [{
@@ -33,11 +33,12 @@ class Demo extends  Component {
                     url: `./src/1.jpg`
                 },{
                     name: 'demo2',
-                    url: `./src/2.jpg`
+                    url: `./src/test.jpg`
                 }
                 ],
                 activeIndex:1
             })
+            //Dialog.mask('testIamgeView');
         },200)
         Dialog.mask('testIamgeView');
         //Dialog.mask('testIamgeView1');
@@ -51,7 +52,7 @@ class Demo extends  Component {
         return (
             <div>
                 <Button onClick={::this.show}>点击我显示图片预览</Button>
-                <ImageView id="testIamgeView" file={this.state.file} activeIndex={this.state.activeIndex} isMask={false}/>
+                <ImageView id="testIamgeView" file={this.state.file} activeIndex={this.state.activeIndex} isMask={true}/>
 
             </div>
         )
