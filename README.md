@@ -80,13 +80,13 @@ ps： file参数需按上述结构。单张图片支持对象，多张必须为�
 *   二、以子对象的方式传入   
 
 
-`
-     <ImageView id="testIamgeView1" activeIndex={0}>
+```
+                  <ImageView id="testIamgeView1" activeIndex={0}>
                         <item url='./src/3.jpg' name='demo1'></item>
                         <item url='./src/2.jpg' name='demo2'></item>
                         <item url='./src/1.jpg' name='demo3'></item>
                     </ImageView>
-`
+```
 
 ## 示例演示
 
