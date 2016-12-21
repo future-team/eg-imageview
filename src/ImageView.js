@@ -259,11 +259,21 @@ export default class ImageView extends Component {
                             {this.renderContent()}
                         </Draggable>
                     </div>
-                    <div className='icon-side left-15'>
+                    <div className={
+                        classnames(
+                            'icon-side left-15',
+                            this.isShowSideArrow()
+                        )
+                    }>
                         <Icon onClick={::this.countIndex.bind(this,'left')} className='upload-icon'
                               name='chevron_left'></Icon>
                     </div>
-                    <div className='icon-side right-15'>
+                    <div className={
+                        classnames(
+                            'icon-side right-15',
+                            this.isShowSideArrow()
+                        )
+                    }>
                         <Icon onClick={::this.countIndex.bind(this,'right')} className='upload-icon'
                               name='chevron_right'></Icon>
                     </div>
@@ -285,7 +295,13 @@ export default class ImageView extends Component {
             </Dialog>
         );
     }
-
+    /**
+     * is show side arrow
+     * */
+    isShowSideArrow(){
+        let len = this.getFileLength();
+        return len > 1 ? '' : 'hide';
+    }
     /**
      * 放大或者拖动时不需要overHidden
      * */
@@ -344,7 +360,7 @@ export default class ImageView extends Component {
      * get file info push to local
      * */
     saveToLocal(file) {
-        this._file = file;
+        this._file = isArray(file)?file: toArray(file);
     }
 
     getFileLength() {
@@ -352,7 +368,7 @@ export default class ImageView extends Component {
     }
 
     getImgOpt(index) {
-        let i = this.isValidLength(index, 0, this.getFileLength()) ? index : 0;
+        let i = this.isValidLength(index, 0, this.getFileLength()-1) ? index : 0;
         return this._file ? this._file[i] : undefined;
     }
 

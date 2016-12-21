@@ -37,6 +37,11 @@ class Demo extends  Component {
                 }
                 ],
                 activeIndex:1
+                //file: {
+                //    name: 'demo',
+                //    url: `./src/1.jpg`
+                //}
+
             })
             //Dialog.mask('testIamgeView');
         },200)
