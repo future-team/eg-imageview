@@ -43,6 +43,38 @@
              * @default 0
              * */
             activeIndex:0
+           /**
+             * @param showIcon
+             * 配置要显示的操作图标
+             * @default Object
+             * */
+            showIcon:{
+                /**
+                 * @param leftRotate
+                 * 是否显示左旋转图标
+                 * @default false
+                 * */
+                leftRotate:false,
+                /**
+                 * @param rightRotate
+                 * 是否显示左旋转图标
+                 * @default false
+                 * */
+                rightRotate:false,
+                /**
+                 * @param zoomIn
+                 * 是否显示放大图标
+                 * @default false
+                 * */
+                zoomIn:false,
+                /**
+                 * @param zoomOut
+                 * 是否显示放大图标
+                 * @default false
+                 * */
+                zoomOut:false
+            }                                
+            
 ```   
 
 ps： file参数需按上述结构。单张图片支持对象，多张必须为数组。
@@ -61,8 +93,13 @@ ps： file参数需按上述结构。单张图片支持对象，多张必须为�
     let file = {
         name:'test',
         url:'./src/test.jpg'
-    };
-    
+    },
+    showIcon={
+              leftRotate:true,
+               rightRotate:true,
+               zoomIn:true,
+               zoomOut:true
+               };
     function show(){
         Dialog.mask('testIamgeView');
     }
@@ -70,7 +107,7 @@ ps： file参数需按上述结构。单张图片支持对象，多张必须为�
     ReactDom.render(
         <div>
             <Button onClick={show}>点击我显示图片预览</Button>
-            <ImageView id="testIamgeView" file={this.state.file} activeIndex={0}/>
+            <ImageView id="testIamgeView" file={file} activeIndex={0} showIcon={showIcon}/>
         </div>,
         document.getElementById('root')
     );
@@ -94,7 +131,7 @@ ps： file参数需按上述结构。单张图片支持对象，多张必须为�
 
 ## update 
 
-* `version 3.0.0` 优化多图渲染方式，增加动画效果
+* `version 3.0.0` 增加向左向右旋转功能，支持各个选项配置，不再默认全部展示。
 
 
 * `version 2.0.9` 支持多图片上下翻页和是否展示遮罩层

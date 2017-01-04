@@ -33,10 +33,16 @@ class Demo extends  Component {
                     url: `./src/1.jpg`
                 },{
                     name: 'demo2',
-                    url: `./src/test.jpg`
+                    url: `./src/2.jpg`
                 }
                 ],
-                activeIndex:1
+                activeIndex:1,
+                showIcon:{
+                    leftRotate:true,
+                    rightRotate:true,
+                    zoomIn:true,
+                    zoomOut:true
+                }
                 //file: {
                 //    name: 'demo',
                 //    url: `./src/1.jpg`
@@ -56,8 +62,13 @@ class Demo extends  Component {
     render(){
         return (
             <div>
+                <div className='arrow-warp'>
+                <div className='arrow arrow-left'>
+                </div>
+                    <div className='inner'></div>
+                </div>
                 <Button onClick={::this.show}>点击我显示图片预览</Button>
-                <ImageView id="testIamgeView" file={this.state.file} activeIndex={this.state.activeIndex} isMask={true}/>
+                <ImageView id="testIamgeView" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
 
             </div>
         )

@@ -3,11 +3,11 @@
  */
 
 import React,{PropTypes} from 'react';
-import Component from 'eagle-ui/lib/utils/Component';
+import Component from '../node_modules/eagle-ui/lib/utils/Component';
 import {Dialog,Icon} from 'eagle-ui';
 import classnames from 'classnames';
-import ReactDom from 'react/lib/ReactDOM';
-import Dom from 'eagle-ui/lib/utils/Dom'
+import ReactDom from '../node_modules/react/lib/ReactDOM';
+import Dom from '../node_modules/eagle-ui/lib/utils/Dom'
 
 import Draggable from './Draggable'
 import uploadStyle from '../css/imageview.less';
@@ -61,17 +61,45 @@ export default class ImageView extends Component {
          * 当前展示图片下标
          * @default 0
          * */
-        activeIndex: 0
+        activeIndex: 0,
+        /**
+         * @param showIcon
+         * 配置要显示的操作图标
+         * @default Object
+         * */
+        showIcon:{
+            /**
+             * @param leftRotate
+             * 是否显示左旋转图标
+             * @default false
+             * */
+            leftRotate:false,
+            /**
+             * @param rightRotate
+             * 是否显示左旋转图标
+             * @default false
+             * */
+            rightRotate:false,
+            /**
+             * @param zoomIn
+             * 是否显示放大图标
+             * @default false
+             * */
+            zoomIn:false,
+            /**
+             * @param zoomOut
+             * 是否显示放大图标
+             * @default false
+             * */
+            zoomOut:false
+
+        }
     };
 
     constructor(props, context) {
         super(props, context);
-        //this.imageSliderId = this.uniqueId();
         this.imgId = this.uniqueId();
-        //default total 1
         this.totalNum = 1;
-        //imgs sizes
-        this.imgSizes = [];
         this.transform = 'scale(1, 1) rotate(0deg)';
         this.state = {
             maxHeight: (document.documentElement.clientHeight * 1 - 100),
@@ -82,7 +110,6 @@ export default class ImageView extends Component {
             },
             activeIndex: this.props.activeIndex || 0,
             name: '图片',
-            dirClass: 'left0',
             sizeChange: false
         }
         this.initSize = {
@@ -90,8 +117,19 @@ export default class ImageView extends Component {
             width: 'auto'
         };
         this.isLoop = this.props.isLoop;
+        this.showIcon = this.props.showIcon;
     }
-    cssEnhance(type) {
+    /**
+     * 判断旋转方向
+     * */
+    getDirNum(rorateVal,dir){
+
+        return dir == 1 ? (rorateVal >= 0?1:-1):(rorateVal <= 0 ? -1:1);
+    }
+    /**
+     * @dir -1 向左 1 向右
+     * */
+    cssEnhance(type,dir) {
         const val = this.transform.match(/-?\d+\.?\d*/g);
         if (val && val.length >= 3) {
             let {zoom, rotate} = 0;
@@ -111,7 +149,7 @@ export default class ImageView extends Component {
                     break;
             }
             // this.transform = val;
-            this.calculatePosition(zoom, rotate, type);
+            this.calculatePosition(zoom, rotate, type, dir);
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -123,8 +161,9 @@ export default class ImageView extends Component {
                 width: 'auto'
             },
             activeIndex: typeof(index) == 'undefined' ? this.state.activeIndex : index
-        })
+        });
         this.isLoop = nextProps.isLoop;
+        this.showIcon = Object.assign(this.showIcon,nextProps.showIcon);
     }
 
     /**
@@ -141,8 +180,8 @@ export default class ImageView extends Component {
         this.transform = 'scale(1, 1) rotate(0deg)';
     }
 
-    getDeg(deg) {
-        switch (deg / 180 % 2) {
+    getDeg(deg,dir) {
+        switch (deg / 180 % 2 *dir) {
             case 0:
             case 1:
                 deg = 0;
@@ -164,15 +203,17 @@ export default class ImageView extends Component {
      * @param zoom 放大/缩小
      * @param rotate 旋转
      * @param type 操作类型
+     * @param dir 旋转方向
      */
-    calculatePosition(zoom, rotate, type) {
+    calculatePosition(zoom, rotate, type,dir) {
         let vals = this.transform.match(/-?\d+\.?\d*/g);
         const scaleVal = vals[0] * 1 + zoom;
-        const rotateVal = vals[2] * 1 + rotate;
+        const rotateVal = vals[2] * 1+ rotate*dir;
         let diff = vals[3] || vals[4] || 0;
         let imgSize = this.imgSize;
         if (type == 'rotate') {
-            const tx = this.getDeg(rotateVal);
+            let dirNum = this.getDirNum(rotateVal,dir);
+            const tx = this.getDeg(rotateVal,dirNum);
             if (tx == 0) {
                 // 重置为正常
                 diff = 0;
@@ -190,6 +231,7 @@ export default class ImageView extends Component {
                 let iW = this.state.imgWrap.width;
                 const mW = this.state.maxWidth;
                 const mH = this.state.maxHeight;
+                let dirNum = this.getDirNum(rotateVal,dir);
                 // wrap 的宽高转换
                 if (iH > mW) {
                     // 计算 iw 的值
@@ -201,7 +243,7 @@ export default class ImageView extends Component {
                     iW = mH
                 }
                 // 计算偏移
-                diff = tx * (iW - iH) / 2;
+                diff = dirNum*tx * (iW - iH) / 2;
                 this.setState({
                     imgWrap: {
                         width: iH,
@@ -245,6 +287,7 @@ export default class ImageView extends Component {
         this.isFile = !!this.props.children ? false : true;
         this.name = this.getImgName(this.state.activeIndex);
         this.totalNum = this.getFileLength();
+        let {leftRotate,rightRotate,zoomIn,zoomOut} = this.showIcon;
         return (
             <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.name} {...this.props} >
                 <div className='img-hover'>
@@ -274,15 +317,25 @@ export default class ImageView extends Component {
                             this.isShowSideArrow()
                         )
                     }>
-                        <Icon onClick={::this.countIndex.bind(this,'right')} className='upload-icon'
+                        <Icon onClick={::this.countIndex.bind(this,'right')} className="upload-icon"
                               name='chevron_right'></Icon>
                     </div>
                     <div className="icon-box">
-                        <Icon onClick={::this.cssEnhance.bind(this,'rotate')} className="upload-icon"
-                              name="radio_unchecked" alt="旋转"></Icon>
-                        <Icon onClick={::this.cssEnhance.bind(this,'max')} className="upload-icon" name="add"
+                        {this.renderArrow(leftRotate,'left')}
+                        {this.renderArrow(rightRotate,'right')}
+                        <Icon onClick={::this.cssEnhance.bind(this,'max',1)}
+                              className={classnames(
+                                            'upload-icon',
+                                            this.isHideIcon(zoomIn)
+                                            )}
+                              name="add"
                               alt="放大"></Icon>
-                        <Icon onClick={::this.cssEnhance.bind(this,'min')} className="upload-icon" name="remove"
+                        <Icon onClick={::this.cssEnhance.bind(this,'min',1)}
+                              className={classnames(
+                                            'upload-icon',
+                                            this.isHideIcon(zoomOut)
+                                            )}
+                              name="remove"
                               alt="缩小"></Icon>
 
                         <div className='tip-num'>
@@ -301,6 +354,12 @@ export default class ImageView extends Component {
     isShowSideArrow(){
         let len = this.getFileLength();
         return len > 1 ? '' : 'hide';
+    }
+    /**
+     * is show icon
+     * */
+    isHideIcon(key){
+        return key?'':'hide';
     }
     /**
      * 放大或者拖动时不需要overHidden
@@ -329,7 +388,6 @@ export default class ImageView extends Component {
                 }><img draggable="false" id={this.imgId}
                        onLoad={this.onLoadHandler.bind(this)}
                        ref={this.imgId}
-                       className={this.state.dirClass}
                        src={this.getImgSrc(index)} alt=""
                        style={{
                                     maxHeight: this.state.maxHeight+'px',
@@ -393,7 +451,7 @@ export default class ImageView extends Component {
         if (!opt) return size;
         tempImg.src = opt.url;
         size = this.getModifySize(tempImg.width,tempImg.height,this.state.maxWidth,this.state.maxHeight);
-        /*size = {
+       /* size = {
             width: tempImg.width,
             height: tempImg.height
         };*/
@@ -422,32 +480,15 @@ export default class ImageView extends Component {
         return size;
     }
 
-    /**
-     * trim imgsize if over maxSize
-     * */
-    getTrimSize() {
-
-    }
-
-    /**
-     * @param isLoop 是否循环
-     * @param cur current index
-     * @param dir next show direction
-     * */
-    getShowNum(cur, dir, isLoop) {
-
-    }
 
     countIndex(dir) {
         let index = parseInt(this.state.activeIndex),
-            max = this.totalNum - 1;
-        let dirClass = 'moveLeft',
+            max = this.totalNum - 1,
             num = index;
         if (dir == 'left') {
             index > 0 && ( num = index - 1 );
             this.isLoop && index == 0 && (num = max);
         } else {
-            dirClass = 'moveRight';
             index < max && ( num = index * 1 + 1 );
             this.isLoop && index == max && (num = 0);
         }
@@ -456,16 +497,28 @@ export default class ImageView extends Component {
             this.imgId = this.uniqueId();
             this.setState({
                 activeIndex: num,
-                dirClass: dirClass,
                 sizeChange: false
-            }, ()=> {
-                setTimeout(()=> {
-                    this.setState({
-                        dirClass: 'left0'
-                    })
-                }, 10)
             });
         }
+
+    }
+    /**
+     * 渲染旋转箭头方向
+     * */
+    renderArrow(key,dir){
+        let dirs={
+            left:-1,
+            right:1
+        }
+        return <div onClick={::this.cssEnhance.bind(this,'rotate',dirs[dir])}
+                    className={classnames(
+                                            'arrow-warp',
+                                            `arrow-${dir}`,
+                                             this.isHideIcon(key)
+                                            )}>
+                    <div className='arrow'></div>
+                    <div className='inner'></div>
+                </div>
 
     }
 }
