@@ -14,7 +14,7 @@
 
 ## 参数介绍   
 
-```
+```js
             /**
              * @param file
              * 图片参数数组
@@ -57,7 +57,7 @@
                 leftRotate:false,
                 /**
                  * @param rightRotate
-                 * 是否显示左旋转图标
+                 * 是否显示右旋转图标
                  * @default false
                  * */
                 rightRotate:false,
@@ -117,7 +117,7 @@ ps： file参数需按上述结构。单张图片支持对象，多张必须为�
 *   二、以子对象的方式传入   
 
 
-```
+```js
                   <ImageView id="testIamgeView1" activeIndex={0}>
                         <item url='./src/3.jpg' name='demo1'></item>
                         <item url='./src/2.jpg' name='demo2'></item>
