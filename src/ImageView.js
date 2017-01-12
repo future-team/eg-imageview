@@ -3,11 +3,11 @@
  */
 
 import React,{PropTypes} from 'react';
-import Component from '../node_modules/eagle-ui/lib/utils/Component';
+import Component from 'eagle-ui/lib/utils/Component';
 import {Dialog,Icon} from 'eagle-ui';
 import classnames from 'classnames';
-import ReactDom from '../node_modules/react/lib/ReactDOM';
-import Dom from '../node_modules/eagle-ui/lib/utils/Dom'
+import ReactDom from 'react/lib/ReactDOM';
+import Dom from 'eagle-ui/lib/utils/Dom'
 
 import Draggable from './Draggable'
 import uploadStyle from '../css/imageview.less';
