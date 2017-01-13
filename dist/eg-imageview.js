@@ -417,7 +417,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.setState({
 	            sizeChange: true
 	        });
-	        //Dialog.mask(this.props.id);
+	        _eagleUi.Dialog.mask(this.props.id);
 	    };
 
 	    ImageView.prototype.render = function render() {
@@ -425,6 +425,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _this = this;
 
 	        this.isFile = !!this.props.children ? false : true;
+	        var file = this.props.file;
+
+	        var files = !this.isFile ? this.transToFile() : file;
+	        this.saveToLocal(files);
 	        this.name = this.getImgName(this.state.activeIndex);
 	        this.totalNum = this.getFileLength();
 	        var _showIcon = this.showIcon;
@@ -533,10 +537,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * */
 
 	    ImageView.prototype.renderContent = function renderContent() {
-	        var file = this.props.file;
-
-	        var files = !this.isFile ? this.transToFile() : file;
-	        this.saveToLocal(files);
+	        //let {file} = this.props;
+	        //let files = !this.isFile ? this.transToFile() : file;
+	        //this.saveToLocal(files);
 	        return _react2['default'].createElement(
 	            'div',
 	            null,
@@ -665,6 +668,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                sizeChange: false
 	            });
 	        }
+	        _eagleUi.Dialog.mask(this.props.id);
 	    };
 
 	    /**
