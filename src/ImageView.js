@@ -160,7 +160,7 @@ export default class ImageView extends Component {
                 height: 'auto',
                 width: 'auto'
             },
-            activeIndex: typeof(index) == 'undefined' ? this.state.activeIndex : index,
+            activeIndex: typeof(index) == 'undefined' ? this.state.activeIndex : index
         });
         this.isLoop = nextProps.isLoop;
         this.showIcon = Object.assign(this.showIcon,nextProps.showIcon);
@@ -279,7 +279,7 @@ export default class ImageView extends Component {
         this.setState({
             sizeChange: true
         })
-        Dialog.mask(this.props.id);
+        //Dialog.mask(this.props.id);
     }
 
     render() {
@@ -502,7 +502,7 @@ export default class ImageView extends Component {
                 sizeChange: false
             });
         }
-        Dialog.mask(this.props.id);
+        //Dialog.mask(this.props.id);
     }
     /**
      * 渲染旋转箭头方向

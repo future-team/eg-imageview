@@ -33,7 +33,7 @@ class Demo extends  Component {
                     url: `./src/1.jpg`
                 },{
                     name: 'demo2',
-                    url: `./src/2.jpg`
+                    url: `./src/1.jpg`
                 }
                 ],
                 activeIndex:0,
@@ -49,7 +49,7 @@ class Demo extends  Component {
                 //}
 
             })
-            Dialog.mask('testIamgeView');
+            //Dialog.mask('testIamgeView');
         },200)
         Dialog.mask('testIamgeView');
         //Dialog.mask('testIamgeView1');
