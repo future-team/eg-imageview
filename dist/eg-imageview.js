@@ -238,6 +238,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            },
 	            activeIndex: this.props.activeIndex || 0,
 	            name: '图片',
+	            //动画准备，暂时不用
 	            sizeChange: false
 	        };
 	        this.initSize = {
@@ -283,13 +284,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    rotate = 0;
 	                    break;
 	            }
-	            // this.transform = val;
 	            this.calculatePosition(zoom, rotate, type, dir);
 	        }
 	    };
 
 	    ImageView.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	        this.transform = 'scale(1, 1) rotate(0deg)';
 	        var index = nextProps.activeIndex;
 	        this.setState({
 	            imgWrap: {
@@ -300,6 +299,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        this.isLoop = nextProps.isLoop;
 	        this.showIcon = Object.assign(this.showIcon, nextProps.showIcon);
+	    };
+
+	    ImageView.prototype.transformImg = function transformImg() {
+	        /**
+	         * @todo 原来操作dom，先不管等待改进
+	         * */
+	        setTimeout((function () {
+	            var domStyle = _reactLibReactDOM2['default'].findDOMNode(this.refs[this.imgId]).style;
+	            domStyle.WebkitTransform = this.transform;
+	            domStyle.msTransform = this.transform;
+	            domStyle.OTransform = this.transform;
+	            domStyle.transform = this.transform;
+	        }).bind(this));
 	    };
 
 	    /**
@@ -313,8 +325,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.setState({
 	            imgWrap: size
 	        });
-	        //reset
 	        this.transform = 'scale(1, 1) rotate(0deg)';
+	        this.transformImg();
+	        _eagleUi.Dialog.mask(this.props.id);
 	    };
 
 	    ImageView.prototype.getDeg = function getDeg(deg, dir) {
@@ -407,16 +420,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.transform = 'scale(' + scaleVal + ', ' + scaleVal + ') rotate(' + rotateVal + 'deg) translate(' + diffVal + 'px, ' + diffVal + 'px)';
 	        // 渲染生效
-	        setTimeout((function () {
-	            var domStyle = _reactLibReactDOM2['default'].findDOMNode(this.refs[this.imgId]).style;
-	            domStyle.WebkitTransform = this.transform;
-	            domStyle.msTransform = this.transform;
-	            domStyle.OTransform = this.transform;
-	            domStyle.transform = this.transform;
-	        }).bind(this));
-	        this.setState({
-	            sizeChange: true
-	        });
+	        //@todo 原来操作dom不太好，需改进
+	        this.transformImg();
 	        _eagleUi.Dialog.mask(this.props.id);
 	    };
 
@@ -529,7 +534,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * */
 
 	    ImageView.prototype.isOverHide = function isOverHide() {
-	        return this.state.sizeChange ? '' : 'over-hidden';
+	        //return this.state.sizeChange ? '' : 'over-hidden';
+	        return '';
 	    };
 
 	    /**
@@ -550,7 +556,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ImageView.prototype.renderImage = function renderImage(index) {
 	        return _react2['default'].createElement(
 	            'div',
-	            { className: this.isOverHide() },
+	            null,
 	            _react2['default'].createElement('img', { draggable: 'false', id: this.imgId,
 	                onLoad: this.onLoadHandler.bind(this),
 	                ref: this.imgId,
@@ -619,10 +625,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (!opt) return size;
 	        tempImg.src = opt.url;
 	        size = this.getModifySize(tempImg.width, tempImg.height, this.state.maxWidth, this.state.maxHeight);
-	        /* size = {
-	             width: tempImg.width,
-	             height: tempImg.height
-	         };*/
 	        return size;
 	    };
 
@@ -667,8 +669,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                activeIndex: num,
 	                sizeChange: false
 	            });
+	            //获得imgsize，再重新渲染
+	            this.onLoadHandler();
 	        }
-	        _eagleUi.Dialog.mask(this.props.id);
 	    };
 
 	    /**

@@ -110,6 +110,7 @@ export default class ImageView extends Component {
             },
             activeIndex: this.props.activeIndex || 0,
             name: '图片',
+            //动画准备，暂时不用
             sizeChange: false
         }
         this.initSize = {
@@ -148,22 +149,32 @@ export default class ImageView extends Component {
                     rotate = 0;
                     break;
             }
-            // this.transform = val;
             this.calculatePosition(zoom, rotate, type, dir);
         }
     }
     componentWillReceiveProps(nextProps) {
-        this.transform = 'scale(1, 1) rotate(0deg)';
         let index = nextProps.activeIndex;
         this.setState({
             imgWrap: {
                 height: 'auto',
                 width: 'auto'
             },
-            activeIndex: typeof(index) == 'undefined' ? this.state.activeIndex : index,
+            activeIndex: typeof(index) == 'undefined' ? this.state.activeIndex : index
         });
         this.isLoop = nextProps.isLoop;
         this.showIcon = Object.assign(this.showIcon,nextProps.showIcon);
+    }
+    transformImg(){
+        /**
+         * @todo 原来操作dom，先不管等待改进
+         * */
+        setTimeout((function () {
+            const domStyle = ReactDom.findDOMNode(this.refs[this.imgId]).style;
+            domStyle.WebkitTransform = this.transform;
+            domStyle.msTransform = this.transform;
+            domStyle.OTransform = this.transform;
+            domStyle.transform = this.transform;
+        }).bind(this));
     }
     /**
      * 获取img size & reset
@@ -175,8 +186,9 @@ export default class ImageView extends Component {
         this.setState({
             imgWrap: size
         })
-        //reset
         this.transform = 'scale(1, 1) rotate(0deg)';
+        this.transformImg();
+        Dialog.mask(this.props.id)
     }
 
     getDeg(deg,dir) {
@@ -269,16 +281,8 @@ export default class ImageView extends Component {
         }
         this.transform = `scale(${scaleVal}, ${scaleVal}) rotate(${rotateVal}deg) translate(${diffVal}px, ${diffVal}px)`;
         // 渲染生效
-        setTimeout((function () {
-            const domStyle = ReactDom.findDOMNode(this.refs[this.imgId]).style;
-            domStyle.WebkitTransform = this.transform;
-            domStyle.msTransform = this.transform;
-            domStyle.OTransform = this.transform;
-            domStyle.transform = this.transform;
-        }).bind(this));
-        this.setState({
-            sizeChange: true
-        })
+        //@todo 原来操作dom不太好，需改进
+        this.transformImg();
         Dialog.mask(this.props.id);
     }
 
@@ -367,7 +371,8 @@ export default class ImageView extends Component {
      * 放大或者拖动时不需要overHidden
      * */
     isOverHide() {
-        return this.state.sizeChange ? '' : 'over-hidden';
+        //return this.state.sizeChange ? '' : 'over-hidden';
+        return '';
     }
 
     /**
@@ -385,9 +390,7 @@ export default class ImageView extends Component {
     }
 
     renderImage(index) {
-        return <div className={
-                        this.isOverHide()
-                }><img draggable="false" id={this.imgId}
+        return <div><img draggable="false" id={this.imgId}
                        onLoad={this.onLoadHandler.bind(this)}
                        ref={this.imgId}
                        src={this.getImgSrc(index)} alt=""
@@ -453,10 +456,6 @@ export default class ImageView extends Component {
         if (!opt) return size;
         tempImg.src = opt.url;
         size = this.getModifySize(tempImg.width,tempImg.height,this.state.maxWidth,this.state.maxHeight);
-       /* size = {
-            width: tempImg.width,
-            height: tempImg.height
-        };*/
         return size;
     }
 
@@ -496,13 +495,14 @@ export default class ImageView extends Component {
         }
         if (num != index) {
             this.name = this.getImgName(this.props, this.isFile, num);
-            this.imgId = this.uniqueId();
+            this.imgId = this.uniqueId()
             this.setState({
                 activeIndex: num,
                 sizeChange: false
             });
+            //获得imgsize，再重新渲染
+            this.onLoadHandler()
         }
-        Dialog.mask(this.props.id);
     }
     /**
      * 渲染旋转箭头方向
