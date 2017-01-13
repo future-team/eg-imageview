@@ -187,8 +187,8 @@ export default class ImageView extends Component {
             imgWrap: size
         })
         this.transform = 'scale(1, 1) rotate(0deg)';
+        Dialog.mask(this.props.id);
         this.transformImg();
-        Dialog.mask(this.props.id)
     }
 
     getDeg(deg,dir) {

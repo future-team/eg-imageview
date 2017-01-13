@@ -326,8 +326,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            imgWrap: size
 	        });
 	        this.transform = 'scale(1, 1) rotate(0deg)';
-	        this.transformImg();
 	        _eagleUi.Dialog.mask(this.props.id);
+	        this.transformImg();
 	    };
 
 	    ImageView.prototype.getDeg = function getDeg(deg, dir) {
