@@ -36,7 +36,7 @@ class Demo extends  Component {
                     url: `./src/2.jpg`
                 }
                 ],
-                activeIndex:1,
+                activeIndex:0,
                 showIcon:{
                     leftRotate:true,
                     rightRotate:true,
@@ -49,7 +49,7 @@ class Demo extends  Component {
                 //}
 
             })
-            //Dialog.mask('testIamgeView');
+            Dialog.mask('testIamgeView');
         },200)
         Dialog.mask('testIamgeView');
         //Dialog.mask('testIamgeView1');

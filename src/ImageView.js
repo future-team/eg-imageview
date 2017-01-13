@@ -160,12 +160,11 @@ export default class ImageView extends Component {
                 height: 'auto',
                 width: 'auto'
             },
-            activeIndex: typeof(index) == 'undefined' ? this.state.activeIndex : index
+            activeIndex: typeof(index) == 'undefined' ? this.state.activeIndex : index,
         });
         this.isLoop = nextProps.isLoop;
         this.showIcon = Object.assign(this.showIcon,nextProps.showIcon);
     }
-
     /**
      * 获取img size & reset
      * */
@@ -280,11 +279,14 @@ export default class ImageView extends Component {
         this.setState({
             sizeChange: true
         })
-        //Dialog.mask(this.props.id);
+        Dialog.mask(this.props.id);
     }
 
     render() {
         this.isFile = !!this.props.children ? false : true;
+        let {file} = this.props;
+        let files = !this.isFile ? this.transToFile() : file;
+        this.saveToLocal(files);
         this.name = this.getImgName(this.state.activeIndex);
         this.totalNum = this.getFileLength();
         let {leftRotate,rightRotate,zoomIn,zoomOut} = this.showIcon;
@@ -372,9 +374,9 @@ export default class ImageView extends Component {
      * 渲染多图情况
      * */
     renderContent() {
-        let {file} = this.props;
-        let files = !this.isFile ? this.transToFile() : file;
-        this.saveToLocal(files);
+        //let {file} = this.props;
+        //let files = !this.isFile ? this.transToFile() : file;
+        //this.saveToLocal(files);
         return (
             <div>
                 {this.renderImage(this.state.activeIndex)}
@@ -500,7 +502,7 @@ export default class ImageView extends Component {
                 sizeChange: false
             });
         }
-
+        Dialog.mask(this.props.id);
     }
     /**
      * 渲染旋转箭头方向
