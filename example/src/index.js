@@ -14,7 +14,7 @@ class Demo extends  Component {
         }
     }
     show() {
-        const index = parseInt(Math.random() * 20) % 10 || 1;
+        const index = parseInt(Math.random() * 3) % 10 || 1;
         this.setState({
             file: {
                 name: 'demo',

@@ -173,6 +173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //this.imageSliderId = this.uniqueId();
 	        this.imgId = this.uniqueId();
 	        this.transform = 'scale(1, 1) rotate(0deg)';
+	        this.imgSizeMap = {};
 	        this.state = {
 	            maxHeight: document.documentElement.clientHeight * 1 - 100,
 	            maxWidth: document.documentElement.clientWidth * 1 - 100,
@@ -230,18 +231,34 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    ImageView.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
 	        this.transform = 'scale(1, 1) rotate(0deg)';
+	        var width = 'auto',
+	            height = 'auto';
+	        if (nextProps.file && nextProps.file.url && this.imgSizeMap[nextProps.file.url]) {
+	            var imgSize = this.imgSizeMap[nextProps.file.url];
+	            width = imgSize.width;
+	            height = imgSize.height;
+	        }
 	        this.setState({
 	            imgWrap: {
-	                height: 'auto',
-	                width: 'auto'
+	                height: height,
+	                width: width
 	            },
 	            modifyImgStyle: null
 	        });
 	    };
 
 	    ImageView.prototype.onLoadHandler = function onLoadHandler(e) {
+
 	        // 获取首次加载图片的大小
 	        this.imgSize = _eagleUiLibUtilsDom2['default'](e.target).offset(); //.getBoundingClientRect();
+	        var file = this.props.file;
+
+	        if (file && file.url) {
+	            this.imgSizeMap[file.url] = {
+	                width: this.imgSize.width,
+	                height: this.imgSize.height
+	            };
+	        }
 	        this.setState({
 	            imgWrap: {
 	                width: this.imgSize.width,
@@ -1006,8 +1023,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./imageview.less", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/less-loader/index.js!./imageview.less");
+			module.hot.accept("!!../node_modules/css-loader/index.js!../node_modules/less-loader/index.js!./imageview.less", function() {
+				var newContent = require("!!../node_modules/css-loader/index.js!../node_modules/less-loader/index.js!./imageview.less");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});

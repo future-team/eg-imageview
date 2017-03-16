@@ -46,6 +46,7 @@ export default class ImageView extends Component{
         //this.imageSliderId = this.uniqueId();
         this.imgId = this.uniqueId();
         this.transform = 'scale(1, 1) rotate(0deg)';
+        this.imgSizeMap={};
         this.state = {
             maxHeight: (document.documentElement.clientHeight*1-100),
             maxWidth: (document.documentElement.clientWidth*1-100),
@@ -101,18 +102,33 @@ export default class ImageView extends Component{
     }
     componentWillReceiveProps (nextProps) {
         this.transform = 'scale(1, 1) rotate(0deg)';
+        let width='auto',
+            height='auto';
+        if(nextProps.file&&nextProps.file.url&&this.imgSizeMap[nextProps.file.url]){
+            let imgSize=this.imgSizeMap[nextProps.file.url];
+            width=imgSize.width;
+            height=imgSize.height;
+        }
         this.setState({
             imgWrap: {
-                height: 'auto',
-                width: 'auto'
+                height,
+                width
             },
             modifyImgStyle: null
         })
     }
 
     onLoadHandler (e) {
+
         // 获取首次加载图片的大小
         this.imgSize = Dom(e.target).offset()//.getBoundingClientRect();
+        let {file}=this.props;
+        if(file&&file.url){
+            this.imgSizeMap[file.url]={
+                width: this.imgSize.width,
+                height: this.imgSize.height
+            }
+        }
         this.setState({
             imgWrap : {
                 width: this.imgSize.width,
