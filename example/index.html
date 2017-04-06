@@ -3,14 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>图片预览</title>
+    <style>
+        .menu{
+            width: 230px;
+            position: fixed;
+            left: 0;
+            top: 50px;
+            bottom: 60px;
+            background: #fff;
+            border-right: 1px solid #e2e2e2;
+        }
+        .menu a{
+            display: block;
+            padding: 10px 10px 10px 50px;
+            width: 100%;
+            border-bottom: 1px solid #e2e2e2;
+        }
+        .content{
+            margin:55px 10px 55px 270px;
+            height: 100%;
+        }
+        .menu a:active, .menu a:focus{
+            background: #d94000;
+            color: #fff;
+        }
+    </style>
 </head>
 <body>
-<ul>
-    <li><a href="#demo1">demo1</a></li>
-    <li><a href="#demo2">demo2</a></li>
-</ul>
-<div id="root" style="padding: 10px"></div>
-
+<header id="head" style="
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+"></header>
+<div class="menu" id="menu">
+    <a class="sub ft-18" href="#/demo1">Demo-1</a>
+    <a class="sub ft-18" href="#/demo2">Demo-2</a>
+</div>
+<div class="content">
+    <div id="root" style="padding: 10px"></div>
+</div>
+<footer id="footer" style="
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    left: 0;
+"></footer>
 <script src="/dist/eg-imageview.js"></script>
 </body>
 </html>

@@ -6,10 +6,9 @@ import React,{PropTypes} from 'react';
 import Component from 'eagle-ui/lib/utils/Component';
 import {Dialog,Icon} from 'eagle-ui';
 import classnames from 'classnames';
-import ReactDom from 'react/lib/ReactDOM';
 
 import Draggable from './Draggable'
-import uploadStyle from '../css/imageview.less';
+import '../css/imageview.less';
 import {isArray, toArray} from './utils'
 
 export default class ImageView extends Component {

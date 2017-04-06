@@ -4,7 +4,7 @@ import ReactDom from 'react/lib/ReactDOM';
 import {Button,Dialog,Toast,Icon} from 'eagle-ui';
 import { Redirect, Router, Route } from 'react-router';
 import History from 'history/lib/createHashHistory';
-
+import {Head,Footer} from 'gfs-head'
 
 class Demo1 extends  Component {
     constructor(props){
@@ -59,55 +59,47 @@ class Demo2 extends  Component {
     constructor(props){
         super(props)
         this.state = {
-            file: [],
+            file: [{
+                name: 'demo1111',
+                url: `./src/6.jpg`
+            },{
+                name: 'demo2',
+                url: `./src/7.jpg`
+            },{
+                name: 'demo3',
+                url: `./src/10.jpg`
+            },{
+                name: 'demo4',
+                url: `./src/8.jpg`
+            },{
+                name: 'demo5',
+                url: `./src/9.jpg`
+            }
+            ],
+            showIcon:{
+                leftRotate:true,
+                rightRotate:true,
+                zoomIn:true,
+                zoomOut:true
+            },
             activeIndex:0
         }
     }
-    show() {
-        var a;
-        const index = parseInt(Math.random() * 20) % 10 || 1;
-        setTimeout(()=>{
-            this.setState({
-                file: [{
-                    name: 'demo1111',
-                    url: `./src/6.jpg`
-                },{
-                    name: 'demo2',
-                    url: `./src/7.jpg`
-                },{
-                    name: 'demo3',
-                    url: `./src/10.jpg`
-                },{
-                    name: 'demo4',
-                    url: `./src/8.jpg`
-                },{
-                    name: 'demo5',
-                    url: `./src/9.jpg`
-                }
-                ],
-                activeIndex:0,
-                showIcon:{
-                    leftRotate:true,
-                    rightRotate:true,
-                    zoomIn:true,
-                    zoomOut:true
-                }
-            })
-            Dialog.mask('testIamgeView');
-        },200)
-        Dialog.mask('testIamgeView');
+    show(id) {
+        console.log('show?')
+        Dialog.mask(id);
     }
     render(){
         return (
             <div>
                 <h1>demo2</h1>
-                <div className='arrow-warp'>
-                    <div className='arrow arrow-left'>
-                    </div>
-                    <div className='inner'></div>
-                </div>
-                <Button onClick={::this.show}>点击我显示图片预览demo2</Button>
-                <ImageView id="testIamgeView" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
+                <h2>这是一个imageView的实例-1</h2>
+                <Button onClick={this.show.bind(this,'testIamgeView2')}>点击我显示图片预览demo2</Button>
+                <ImageView id="testIamgeView2" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
+                <br/>
+                <h2>这是一个imageView的实例-2</h2>
+                <Button onClick={this.show.bind(this, 'testIamgeView3')}>点击我显示图片预览demo3</Button>
+                <ImageView id="testIamgeView3" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
             </div>
         )
     }
@@ -138,4 +130,14 @@ class App extends Component {
 ReactDom.render(
     <App/>,
     document.getElementById('root')
+);
+ReactDom.render(
+    <Head titles={[{title: '博客', href: 'http://uedfamily.com/'},
+            {title: '关于我们', href: 'http://uedfamily.com/about/'},
+            {title: '更多组件', href: 'http://uedfamily.com/framework/'}]}/>,
+    document.getElementById('head')
+);
+ReactDom.render(
+    <Footer/>,
+    document.getElementById('footer')
 );
