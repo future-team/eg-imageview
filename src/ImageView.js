@@ -7,7 +7,6 @@ import Component from 'eagle-ui/lib/utils/Component';
 import {Dialog,Icon} from 'eagle-ui';
 import classnames from 'classnames';
 import ReactDom from 'react/lib/ReactDOM';
-import Dom from 'eagle-ui/lib/utils/Dom'
 
 import Draggable from './Draggable'
 import uploadStyle from '../css/imageview.less';
@@ -169,7 +168,7 @@ export default class ImageView extends Component {
          * @todo 原来操作dom，先不管等待改进
          * */
         setTimeout((function () {
-            const domStyle = ReactDom.findDOMNode(this.refs[this.imgId]).style;
+            const domStyle = document.getElementById(this.imgId).style;//ReactDom.findDOMNode(this.refs[this.imgId]).style;
             domStyle.WebkitTransform = this.transform;
             domStyle.msTransform = this.transform;
             domStyle.OTransform = this.transform;
@@ -187,7 +186,7 @@ export default class ImageView extends Component {
             imgWrap: size
         })
         this.transform = 'scale(1, 1) rotate(0deg)';
-        Dialog.mask(this.props.id);
+        // Dialog.mask(this.props.id);
         this.transformImg();
     }
 
@@ -283,7 +282,7 @@ export default class ImageView extends Component {
         // 渲染生效
         //@todo 原来操作dom不太好，需改进
         this.transformImg();
-        Dialog.mask(this.props.id);
+        // Dialog.mask(this.props.id);
     }
 
     render() {

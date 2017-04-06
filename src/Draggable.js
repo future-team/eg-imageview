@@ -5,7 +5,7 @@
 import React,{PropTypes} from 'react';
 import ReactDOM from 'react/lib/ReactDOM';
 import Component from 'eagle-ui/lib/utils/Component';
-import Dom from 'eagle-ui/lib/utils/Dom'
+import Dom from 'eagle-ui/lib/utils/Dom';
 import classNames from 'classnames';
 
 import {addEvent, removeEvent, isNum, getTouchIdentifier, getTouch} from './utils'
