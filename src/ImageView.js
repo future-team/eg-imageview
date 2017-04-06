@@ -391,7 +391,6 @@ export default class ImageView extends Component {
     renderImage(index) {
         return <div><img draggable="false" id={this.imgId}
                        onLoad={this.onLoadHandler.bind(this)}
-                       ref={this.imgId}
                        src={this.getImgSrc(index)} alt=""
                        style={{
                                     maxHeight: this.state.maxHeight+'px',

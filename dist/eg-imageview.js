@@ -555,7 +555,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            null,
 	            _react2['default'].createElement('img', { draggable: 'false', id: this.imgId,
 	                onLoad: this.onLoadHandler.bind(this),
-	                ref: this.imgId,
 	                src: this.getImgSrc(index), alt: '',
 	                style: {
 	                    maxHeight: this.state.maxHeight + 'px',
