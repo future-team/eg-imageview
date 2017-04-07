@@ -42,7 +42,7 @@ gulp.task('demo-webpack', function(done) {
       "*": "http://localhost:9090"
     },*/
     filename: config.name+".js",
-    publicPath: path.join(process.cwd(),'example/dist/'),
+    publicPath: '/dist/',
     //headers: { "X-Custom-Header": "yes" },
     stats: { colors: true }
   });
