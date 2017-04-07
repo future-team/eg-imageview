@@ -459,26 +459,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    'div',
 	                    { className: _classnames2['default']('icon-side left-15', this.isShowSideArrow()) },
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.countIndex).bind.call(_context, this, 'left'), className: 'upload-icon',
-	                        name: 'chevron_left' })
+	                        name: 'chevron-left' })
 	                ),
 	                _react2['default'].createElement(
 	                    'div',
 	                    { className: _classnames2['default']('icon-side right-15', this.isShowSideArrow()) },
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.countIndex).bind.call(_context, this, 'right'), className: 'upload-icon',
-	                        name: 'chevron_right' })
+	                        name: 'chevron-right' })
 	                ),
 	                _react2['default'].createElement(
 	                    'div',
 	                    { className: 'icon-box' },
-	                    this.renderArrow(leftRotate, 'left'),
-	                    this.renderArrow(rightRotate, 'right'),
+	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'rotate', -1),
+	                        className: _classnames2['default']('upload-icon', this.isHideIcon('left')),
+	                        name: 'zuoxuanzhuan',
+	                        alt: '左旋转' }),
+	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'rotate', 1),
+	                        className: _classnames2['default']('upload-icon', this.isHideIcon('right')),
+	                        name: 'youxuanzhuan',
+	                        alt: '右旋转' }),
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'max', 1),
 	                        className: _classnames2['default']('upload-icon', this.isHideIcon(zoomIn)),
 	                        name: 'add',
 	                        alt: '放大' }),
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'min', 1),
 	                        className: _classnames2['default']('upload-icon', this.isHideIcon(zoomOut)),
-	                        name: 'remove',
+	                        name: 'minus',
 	                        alt: '缩小' }),
 	                    _react2['default'].createElement(
 	                        'div',
@@ -1097,7 +1103,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _classCallCheck(instance, Constructor) {
+	    if (!(instance instanceof Constructor)) {
+	        throw new TypeError('Cannot call a class as a function');
+	    }
+	}
 
 	var Dom = (function () {
 	    function Dom(obj) {

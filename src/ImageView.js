@@ -315,7 +315,7 @@ export default class ImageView extends Component {
                         )
                     }>
                         <Icon onClick={::this.countIndex.bind(this,'left')} className='upload-icon'
-                              name='chevron_left'></Icon>
+                              name='chevron-left'></Icon>
                     </div>
                     <div className={
                         classnames(
@@ -324,11 +324,23 @@ export default class ImageView extends Component {
                         )
                     }>
                         <Icon onClick={::this.countIndex.bind(this,'right')} className="upload-icon"
-                              name='chevron_right'></Icon>
+                              name='chevron-right'></Icon>
                     </div>
                     <div className="icon-box">
-                        {this.renderArrow(leftRotate,'left')}
-                        {this.renderArrow(rightRotate,'right')}
+                        <Icon onClick={::this.cssEnhance.bind(this,'rotate', -1)}
+                              className={classnames(
+                                  'upload-icon',
+                                  this.isHideIcon('left')
+                              )}
+                              name="zuoxuanzhuan"
+                              alt="左旋转"></Icon>
+                        <Icon onClick={::this.cssEnhance.bind(this,'rotate', 1)}
+                              className={classnames(
+                                  'upload-icon',
+                                  this.isHideIcon('right')
+                              )}
+                              name="youxuanzhuan"
+                              alt="右旋转"></Icon>
                         <Icon onClick={::this.cssEnhance.bind(this,'max',1)}
                               className={classnames(
                                             'upload-icon',
@@ -341,9 +353,8 @@ export default class ImageView extends Component {
                                             'upload-icon',
                                             this.isHideIcon(zoomOut)
                                             )}
-                              name="remove"
+                              name="minus"
                               alt="缩小"></Icon>
-
                         <div className='tip-num'>
                             <label className='red-txt'>{this.state.activeIndex + 1}</label>
                             <label className='mar-5'>/</label>
