@@ -23,7 +23,7 @@
             margin:55px 10px 55px 270px;
             height: 100%;
         }
-        .menu a:active, .menu a:focus{
+        .menu .active{
             background: #d94000;
             color: #fff;
         }
@@ -51,5 +51,14 @@
     left: 0;
 "></footer>
 <script src="/dist/eg-imageview.js"></script>
+<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+    $(function(){
+        $('#menu a').click(function(){
+            $(this).siblings().removeClass('active');
+            $(this).addClass('active');
+        });
+    })
+</script>
 </body>
 </html>

@@ -15,8 +15,6 @@ class Demo1 extends  Component {
         }
     }
     show() {
-        var a;
-        const index = parseInt(Math.random() * 20) % 10 || 1;
         setTimeout(()=>{
             this.setState({
                 file: [{
@@ -25,6 +23,12 @@ class Demo1 extends  Component {
                 },{
                     name: 'demo2',
                     url: `./src/2.jpg`
+                },{
+                    name: 'demo7',
+                    url: `./src/7.jpg`
+                },{
+                    name: 'demo9',
+                    url: `./src/8.jpg`
                 }
                 ],
                 activeIndex:0,
@@ -35,9 +39,9 @@ class Demo1 extends  Component {
                     zoomOut:true
                 }
             })
-            Dialog.mask('testIamgeView1');
+            Dialog.mask('testImageView1');
         },200)
-        Dialog.mask('testIamgeView1');
+        Dialog.mask('testImageView1');
     }
     render(){
         return (
@@ -49,7 +53,7 @@ class Demo1 extends  Component {
                     <div className='inner'></div>
                 </div>
                 <Button onClick={::this.show}>点击我显示图片预览demo1</Button>
-                <ImageView id="testIamgeView1" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
+                <ImageView id="testImageView1" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
             </div>
         )
     }
@@ -60,22 +64,18 @@ class Demo2 extends  Component {
         super(props)
         this.state = {
             file: [{
-                name: 'demo1111',
-                url: `./src/6.jpg`
-            },{
-                name: 'demo2',
-                url: `./src/7.jpg`
-            },{
                 name: 'demo3',
-                url: `./src/10.jpg`
-            },{
-                name: 'demo4',
-                url: `./src/8.jpg`
+                url: `./src/3.jpg`
             },{
                 name: 'demo5',
+                url: `./src/5.jpg`
+            },{
+                name: 'demo6',
+                url: `./src/6.jpg`
+            },{
+                name: 'demo9',
                 url: `./src/9.jpg`
-            }
-            ],
+            }],
             showIcon:{
                 leftRotate:true,
                 rightRotate:true,
@@ -86,7 +86,6 @@ class Demo2 extends  Component {
         }
     }
     show(id) {
-        console.log('show?')
         Dialog.mask(id);
     }
     render(){
@@ -94,12 +93,12 @@ class Demo2 extends  Component {
             <div>
                 <h1>demo2</h1>
                 <h2>这是一个imageView的实例-1</h2>
-                <Button onClick={this.show.bind(this,'testIamgeView2')}>点击我显示图片预览demo2</Button>
-                <ImageView id="testIamgeView2" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
+                <Button onClick={this.show.bind(this,'testImageView2')}>点击我显示图片预览demo2</Button>
+                <ImageView id="testImageView2" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
                 <br/>
                 <h2>这是一个imageView的实例-2</h2>
-                <Button onClick={this.show.bind(this, 'testIamgeView3')}>点击我显示图片预览demo3</Button>
-                <ImageView id="testIamgeView3" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
+                <Button onClick={this.show.bind(this, 'testImageView3')}>点击我显示图片预览demo3</Button>
+                <ImageView id="testImageView3" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
             </div>
         )
     }
