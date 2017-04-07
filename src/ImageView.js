@@ -6,10 +6,9 @@ import React,{PropTypes} from 'react';
 import Component from 'eagle-ui/lib/utils/Component';
 import {Dialog,Icon} from 'eagle-ui';
 import classnames from 'classnames';
-import ReactDom from 'react/lib/ReactDOM';
 
 import Draggable from './Draggable'
-import uploadStyle from '../css/imageview.less';
+import '../css/imageview.less';
 import {isArray, toArray} from './utils'
 
 export default class ImageView extends Component {
@@ -101,8 +100,8 @@ export default class ImageView extends Component {
         this.totalNum = 1;
         this.transform = 'scale(1, 1) rotate(0deg)';
         this.state = {
-            maxHeight: (document.documentElement.clientHeight * 1 - 100),
-            maxWidth: (document.documentElement.clientWidth * 1 - 100),
+            maxHeight: (document.documentElement.clientHeight - 100),
+            maxWidth: (document.documentElement.clientWidth - 100),
             imgWrap: {
                 height: 'auto',
                 width: 'auto'
@@ -162,6 +161,7 @@ export default class ImageView extends Component {
         });
         this.isLoop = nextProps.isLoop;
         this.showIcon = Object.assign(this.showIcon,nextProps.showIcon);
+        this.resetImageStatus();
     }
     transformImg(){
         /**
@@ -177,6 +177,7 @@ export default class ImageView extends Component {
     }
     /**
      * 获取img size & reset
+     * https://bugs.chromium.org/p/chromium/issues/detail?id=7731
      * */
     onLoadHandler(e) {
         // 获取加载图片的大小
@@ -185,9 +186,7 @@ export default class ImageView extends Component {
         this.setState({
             imgWrap: size
         })
-        this.transform = 'scale(1, 1) rotate(0deg)';
-        // Dialog.mask(this.props.id);
-        this.transformImg();
+        this.resetImageStatus();
     }
 
     getDeg(deg,dir) {
@@ -221,6 +220,9 @@ export default class ImageView extends Component {
         const rotateVal = vals[2] * 1+ rotate*dir;
         let diff = vals[3] || vals[4] || 0;
         let imgSize = this.imgSize;
+        if(!imgSize || !imgSize.width || !imgSize.height){
+            imgSize = this.imgSize = this.getImgSize(this.state.activeIndex);
+        }
         if (type == 'rotate') {
             let dirNum = this.getDirNum(rotateVal,dir);
             const tx = this.getDeg(rotateVal,dirNum);
@@ -237,8 +239,8 @@ export default class ImageView extends Component {
             } else {
                 // 图片的宽高比
                 const imgScaleHW = imgSize.width / imgSize.height;
-                let iH = this.state.imgWrap.height;
-                let iW = this.state.imgWrap.width;
+                let iH = imgSize.height;
+                let iW = imgSize.width;
                 const mW = this.state.maxWidth;
                 const mH = this.state.maxHeight;
                 let dirNum = this.getDirNum(rotateVal,dir);
@@ -264,7 +266,6 @@ export default class ImageView extends Component {
         } else {
             // 重置拖放的位置
             this.draggable.reset();
-
         }
         let diffVal = diff * 1;
         // 如果为负数的话,图片就旋转了
@@ -314,7 +315,7 @@ export default class ImageView extends Component {
                         )
                     }>
                         <Icon onClick={::this.countIndex.bind(this,'left')} className='upload-icon'
-                              name='chevron_left'></Icon>
+                              name='chevron-left'></Icon>
                     </div>
                     <div className={
                         classnames(
@@ -323,11 +324,23 @@ export default class ImageView extends Component {
                         )
                     }>
                         <Icon onClick={::this.countIndex.bind(this,'right')} className="upload-icon"
-                              name='chevron_right'></Icon>
+                              name='chevron-right'></Icon>
                     </div>
                     <div className="icon-box">
-                        {this.renderArrow(leftRotate,'left')}
-                        {this.renderArrow(rightRotate,'right')}
+                        <Icon onClick={::this.cssEnhance.bind(this,'rotate', -1)}
+                              className={classnames(
+                                  'upload-icon',
+                                  this.isHideIcon('left')
+                              )}
+                              name="zuoxuanzhuan"
+                              alt="左旋转"></Icon>
+                        <Icon onClick={::this.cssEnhance.bind(this,'rotate', 1)}
+                              className={classnames(
+                                  'upload-icon',
+                                  this.isHideIcon('right')
+                              )}
+                              name="youxuanzhuan"
+                              alt="右旋转"></Icon>
                         <Icon onClick={::this.cssEnhance.bind(this,'max',1)}
                               className={classnames(
                                             'upload-icon',
@@ -340,9 +353,8 @@ export default class ImageView extends Component {
                                             'upload-icon',
                                             this.isHideIcon(zoomOut)
                                             )}
-                              name="remove"
+                              name="minus"
                               alt="缩小"></Icon>
-
                         <div className='tip-num'>
                             <label className='red-txt'>{this.state.activeIndex + 1}</label>
                             <label className='mar-5'>/</label>
@@ -393,13 +405,13 @@ export default class ImageView extends Component {
                        onLoad={this.onLoadHandler.bind(this)}
                        src={this.getImgSrc(index)} alt=""
                        style={{
-                                    maxHeight: this.state.maxHeight+'px',
-                                    maxWidth: this.state.maxWidth+'px',
-                                    msTransform: this.transform,
-                                    WebkitTransform: this.transform,
-                                    MozTransform: this.transform,
-                                    OTransform: this.transform,
-                                    transform: this.transform}}/>
+                                maxHeight: this.state.maxHeight+'px',
+                                maxWidth: this.state.maxWidth+'px',
+                                msTransform: this.transform,
+                                WebkitTransform: this.transform,
+                                MozTransform: this.transform,
+                                OTransform: this.transform,
+                                transform: this.transform}}/>
         </div>
     }
 
@@ -463,6 +475,7 @@ export default class ImageView extends Component {
 
     /**
      * 是否超出最大宽高
+     * 计算的有点草率啊。。。。
      *  */
     getModifySize(initW, initH, maxW, maxH) {
         let w = this.isOver(initW, maxW),
@@ -520,5 +533,15 @@ export default class ImageView extends Component {
                     <div className='inner'></div>
                 </div>
 
+    }
+
+    /**
+     * 重置图片的状态
+     */
+    resetImageStatus(){
+        this.transform = 'scale(1, 1) rotate(0deg)';
+        // Dialog.mask(this.props.id);
+        this.transformImg();
+        this.draggable.reset();
     }
 }

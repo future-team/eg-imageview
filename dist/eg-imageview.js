@@ -7,7 +7,7 @@
 		var a = typeof exports === 'object' ? factory(require("react"), require("eagle-ui/lib/utils/Component"), require("eagle-ui"), require("react/lib/ReactDOM")) : factory(root["React"], root["Component"], root["Eagleui"], root["ReactDom"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_7__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_8__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -61,7 +61,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	//export Table from './tables/Table.js';
 	'use strict';
 
 	exports.__esModule = true;
@@ -114,17 +113,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _classnames2 = _interopRequireDefault(_classnames);
 
-	var _reactLibReactDOM = __webpack_require__(7);
-
-	var _reactLibReactDOM2 = _interopRequireDefault(_reactLibReactDOM);
-
-	var _Draggable = __webpack_require__(8);
+	var _Draggable = __webpack_require__(7);
 
 	var _Draggable2 = _interopRequireDefault(_Draggable);
 
-	var _cssImageviewLess = __webpack_require__(11);
-
-	var _cssImageviewLess2 = _interopRequireDefault(_cssImageviewLess);
+	__webpack_require__(11);
 
 	var _utils = __webpack_require__(10);
 
@@ -226,8 +219,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.totalNum = 1;
 	        this.transform = 'scale(1, 1) rotate(0deg)';
 	        this.state = {
-	            maxHeight: document.documentElement.clientHeight * 1 - 100,
-	            maxWidth: document.documentElement.clientWidth * 1 - 100,
+	            maxHeight: document.documentElement.clientHeight - 100,
+	            maxWidth: document.documentElement.clientWidth - 100,
 	            imgWrap: {
 	                height: 'auto',
 	                width: 'auto'
@@ -295,6 +288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	        this.isLoop = nextProps.isLoop;
 	        this.showIcon = Object.assign(this.showIcon, nextProps.showIcon);
+	        this.resetImageStatus();
 	    };
 
 	    ImageView.prototype.transformImg = function transformImg() {
@@ -312,6 +306,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * 获取img size & reset
+	     * https://bugs.chromium.org/p/chromium/issues/detail?id=7731
 	     * */
 
 	    ImageView.prototype.onLoadHandler = function onLoadHandler(e) {
@@ -321,9 +316,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.setState({
 	            imgWrap: size
 	        });
-	        this.transform = 'scale(1, 1) rotate(0deg)';
-	        // Dialog.mask(this.props.id);
-	        this.transformImg();
+	        this.resetImageStatus();
 	    };
 
 	    ImageView.prototype.getDeg = function getDeg(deg, dir) {
@@ -358,6 +351,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var rotateVal = vals[2] * 1 + rotate * dir;
 	        var diff = vals[3] || vals[4] || 0;
 	        var imgSize = this.imgSize;
+	        if (!imgSize || !imgSize.width || !imgSize.height) {
+	            imgSize = this.imgSize = this.getImgSize(this.state.activeIndex);
+	        }
 	        if (type == 'rotate') {
 	            var dirNum = this.getDirNum(rotateVal, dir);
 	            var tx = this.getDeg(rotateVal, dirNum);
@@ -374,8 +370,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            } else {
 	                // 图片的宽高比
 	                var imgScaleHW = imgSize.width / imgSize.height;
-	                var iH = this.state.imgWrap.height;
-	                var iW = this.state.imgWrap.width;
+	                var iH = imgSize.height;
+	                var iW = imgSize.width;
 	                var mW = this.state.maxWidth;
 	                var mH = this.state.maxHeight;
 	                var _dirNum = this.getDirNum(rotateVal, dir);
@@ -463,26 +459,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    'div',
 	                    { className: _classnames2['default']('icon-side left-15', this.isShowSideArrow()) },
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.countIndex).bind.call(_context, this, 'left'), className: 'upload-icon',
-	                        name: 'chevron_left' })
+	                        name: 'chevron-left' })
 	                ),
 	                _react2['default'].createElement(
 	                    'div',
 	                    { className: _classnames2['default']('icon-side right-15', this.isShowSideArrow()) },
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.countIndex).bind.call(_context, this, 'right'), className: 'upload-icon',
-	                        name: 'chevron_right' })
+	                        name: 'chevron-right' })
 	                ),
 	                _react2['default'].createElement(
 	                    'div',
 	                    { className: 'icon-box' },
-	                    this.renderArrow(leftRotate, 'left'),
-	                    this.renderArrow(rightRotate, 'right'),
+	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'rotate', -1),
+	                        className: _classnames2['default']('upload-icon', this.isHideIcon('left')),
+	                        name: 'zuoxuanzhuan',
+	                        alt: '左旋转' }),
+	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'rotate', 1),
+	                        className: _classnames2['default']('upload-icon', this.isHideIcon('right')),
+	                        name: 'youxuanzhuan',
+	                        alt: '右旋转' }),
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'max', 1),
 	                        className: _classnames2['default']('upload-icon', this.isHideIcon(zoomIn)),
 	                        name: 'add',
 	                        alt: '放大' }),
 	                    _react2['default'].createElement(_eagleUi.Icon, { onClick: (_context = this.cssEnhance).bind.call(_context, this, 'min', 1),
 	                        className: _classnames2['default']('upload-icon', this.isHideIcon(zoomOut)),
-	                        name: 'remove',
+	                        name: 'minus',
 	                        alt: '缩小' }),
 	                    _react2['default'].createElement(
 	                        'div',
@@ -629,6 +631,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * 是否超出最大宽高
+	     * 计算的有点草率啊。。。。
 	     *  */
 
 	    ImageView.prototype.getModifySize = function getModifySize(initW, initH, maxW, maxH) {
@@ -687,6 +690,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            _react2['default'].createElement('div', { className: 'arrow' }),
 	            _react2['default'].createElement('div', { className: 'inner' })
 	        );
+	    };
+
+	    /**
+	     * 重置图片的状态
+	     */
+
+	    ImageView.prototype.resetImageStatus = function resetImageStatus() {
+	        this.transform = 'scale(1, 1) rotate(0deg)';
+	        // Dialog.mask(this.props.id);
+	        this.transformImg();
+	        this.draggable.reset();
 	    };
 
 	    return ImageView;
@@ -769,12 +783,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 7 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
-
-/***/ },
-/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -799,7 +807,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactLibReactDOM = __webpack_require__(7);
+	var _reactLibReactDOM = __webpack_require__(8);
 
 	var _reactLibReactDOM2 = _interopRequireDefault(_reactLibReactDOM);
 
@@ -1084,12 +1092,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
+
+/***/ },
 /* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _classCallCheck(instance, Constructor) {
+	    if (!(instance instanceof Constructor)) {
+	        throw new TypeError('Cannot call a class as a function');
+	    }
+	}
 
 	var Dom = (function () {
 	    function Dom(obj) {
