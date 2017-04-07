@@ -1,3 +1,4 @@
+var path = require('path');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var webpack = require('webpack');
@@ -41,12 +42,22 @@ gulp.task('demo-webpack', function(done) {
       "*": "http://localhost:9090"
     },*/
     filename: config.name+".js",
-    publicPath: "/dist/",
+    publicPath: '/dist/',
     //headers: { "X-Custom-Header": "yes" },
     stats: { colors: true }
   });
   server.listen(8081, "localhost", function() {});
 
+});
+
+gulp.task('example-webpack',function(done){
+    webpack(demoWebpackConfig).run(function(err, stats) {
+        if(err) throw new gutil.PluginError("example-webpack", err);
+        gutil.log("[webpack]", stats.toString({
+            // output options
+        }));
+        done();
+    });
 });
 
 gulp.task('require-webpack', function(done) {
@@ -86,7 +97,7 @@ gulp.task('watch', function () {
   gulp.watch(['./lib/**/*.*'], ['demo']);
 });
 
-gulp.task('default', ['babel','require-webpack'/*, 'html', 'asset'*/]);
+gulp.task('default', ['babel','require-webpack',/*, 'html', 'asset'*/]);
 gulp.task('test',['karma']);
 gulp.task('demo', ['demo-webpack','open']);
 gulp.task('min',['min-webpack']);

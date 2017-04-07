@@ -2,8 +2,11 @@ import {ImageView} from '../../src/index.js';
 import React, { Component ,PropTypes} from 'react';
 import ReactDom from 'react/lib/ReactDOM';
 import {Button,Dialog,Toast,Icon} from 'eagle-ui';
+import { Redirect, Router, Route } from 'react-router';
+import History from 'history/lib/createHashHistory';
+import {Head,Footer} from 'gfs-head'
 
-class Demo extends  Component {
+class Demo1 extends  Component {
     constructor(props){
         super(props)
         this.state = {
@@ -11,29 +14,21 @@ class Demo extends  Component {
             activeIndex:0
         }
     }
-
     show() {
-        var a;
-        const index = parseInt(Math.random() * 20) % 10 || 1;
-        /*this.setState({
-            file: [{
-                name: 'demo',
-                url: `./src/1.jpg`
-            },{
-                name: 'demo2',
-                url: `./src/2.jpg`
-            }
-            ],
-            activeIndex:a
-        })*/
         setTimeout(()=>{
             this.setState({
                 file: [{
-                    name: 'demo',
+                    name: 'demoeeeeeeee',
                     url: `./src/1.jpg`
                 },{
                     name: 'demo2',
                     url: `./src/2.jpg`
+                },{
+                    name: 'demo7',
+                    url: `./src/7.jpg`
+                },{
+                    name: 'demo9',
+                    url: `./src/8.jpg`
                 }
                 ],
                 activeIndex:0,
@@ -43,39 +38,105 @@ class Demo extends  Component {
                     zoomIn:true,
                     zoomOut:true
                 }
-                //file: {
-                //    name: 'demo',
-                //    url: `./src/1.jpg`
-                //}
-
             })
-            Dialog.mask('testIamgeView');
+            Dialog.mask('testImageView1');
         },200)
-        Dialog.mask('testIamgeView');
-        //Dialog.mask('testIamgeView1');
-      /*  <ImageView id="testIamgeView1" activeIndex={0} isMask={false}>
-            <item url='./src/3.jpg' name='demo1'></item>
-            <item url='./src/2.jpg' name='demo2'></item>
-            <item url='./src/1.jpg' name='demo3'></item>
-        </ImageView>*/
+        Dialog.mask('testImageView1');
     }
     render(){
         return (
             <div>
+                <h1>demo1</h1>
                 <div className='arrow-warp'>
                 <div className='arrow arrow-left'>
                 </div>
                     <div className='inner'></div>
                 </div>
-                <Button onClick={::this.show}>点击我显示图片预览</Button>
-                <ImageView id="testIamgeView" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
-
+                <Button onClick={::this.show}>点击我显示图片预览demo1</Button>
+                <ImageView id="testImageView1" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
             </div>
         )
     }
 }
+
+class Demo2 extends  Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            file: [{
+                name: 'demo3',
+                url: `./src/3.jpg`
+            },{
+                name: 'demo5',
+                url: `./src/5.jpg`
+            },{
+                name: 'demo6',
+                url: `./src/6.jpg`
+            },{
+                name: 'demo9',
+                url: `./src/9.jpg`
+            }],
+            showIcon:{
+                leftRotate:true,
+                rightRotate:true,
+                zoomIn:true,
+                zoomOut:true
+            },
+            activeIndex:0
+        }
+    }
+    show(id) {
+        Dialog.mask(id);
+    }
+    render(){
+        return (
+            <div>
+                <h1>demo2</h1>
+                <h2>这是一个imageView的实例-1</h2>
+                <Button onClick={this.show.bind(this,'testImageView2')}>点击我显示图片预览demo2</Button>
+                <ImageView id="testImageView2" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
+                <br/>
+                <h2>这是一个imageView的实例-2</h2>
+                <Button onClick={this.show.bind(this, 'testImageView3')}>点击我显示图片预览demo3</Button>
+                <ImageView id="testImageView3" file={this.state.file} showIcon={this.state.showIcon} activeIndex={this.state.activeIndex} isMask={true}/>
+            </div>
+        )
+    }
+}
+
+class App extends Component {
+    constructor(props,context) {
+        super(props,context);
+        // Opt-out of persistent state, not recommended.
+        this.history = new History({
+            queryKey: false
+        });
+
+    }
+    static defaultProps={
+
+    };
+    render() {
+        return (
+            <Router history={this.history}>
+                <Route path="/demo1" name="demo1" component={Demo1} />
+                <Route path="/demo2" name="demo2" component={Demo2} />
+                <Redirect from="/" to="/demo2" />
+            </Router>
+        );
+    }
+}
 ReactDom.render(
-        <Demo></Demo>
-    ,
+    <App/>,
     document.getElementById('root')
+);
+ReactDom.render(
+    <Head titles={[{title: '博客', href: 'http://uedfamily.com/'},
+            {title: '关于我们', href: 'http://uedfamily.com/about/'},
+            {title: '更多组件', href: 'http://uedfamily.com/framework/'}]}/>,
+    document.getElementById('head')
+);
+ReactDom.render(
+    <Footer/>,
+    document.getElementById('footer')
 );
