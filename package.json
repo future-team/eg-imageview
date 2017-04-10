@@ -1,6 +1,6 @@
 {
   "name": "eg-imageview",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "description": "图片预览",
   "main": "lib/",
   "repository": "git@github.com:future-team/eg-imageview.git",
@@ -27,7 +27,8 @@
     "classnames": "^2.1.3"
   },
   "peerDependencies": {
-    "eagle-ui": ">1.3.4"
+    "eagle-ui": ">4.0.0",
+    "gfs-icons": ">0.3.1"
   },
   "devDependencies": {
     "babel": "^6.0.15",

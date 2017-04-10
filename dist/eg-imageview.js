@@ -296,11 +296,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @todo 原来操作dom，先不管等待改进
 	         * */
 	        setTimeout((function () {
-	            var domStyle = document.getElementById(this.imgId).style; //ReactDom.findDOMNode(this.refs[this.imgId]).style;
-	            domStyle.WebkitTransform = this.transform;
-	            domStyle.msTransform = this.transform;
-	            domStyle.OTransform = this.transform;
-	            domStyle.transform = this.transform;
+	            var dom = document.getElementById(this.imgId);
+	            if (dom != null) {
+	                var domStyle = dom.style; //ReactDom.findDOMNode(this.refs[this.imgId]).style;
+	                domStyle.WebkitTransform = this.transform;
+	                domStyle.msTransform = this.transform;
+	                domStyle.OTransform = this.transform;
+	                domStyle.transform = this.transform;
+	            }
 	        }).bind(this));
 	    };
 
@@ -700,7 +703,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.transform = 'scale(1, 1) rotate(0deg)';
 	        // Dialog.mask(this.props.id);
 	        this.transformImg();
-	        this.draggable.reset();
+	        this.draggable && this.draggable.reset();
 	    };
 
 	    return ImageView;
@@ -1350,7 +1353,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n  transition: all 1s ease-in-out 0s;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 5px;\n  transition: all 1s ease-in-out 0s;\n}\n.img-hover:hover .icon-side,\n.img-hover:hover .icon-box {\n  visibility: visible;\n  opacity: 1;\n}\n.over-hidden {\n  overflow: hidden;\n}\n.hide {\n  display: none;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.tip-num {\n  display: inline-block;\n  margin-left: 15px;\n  font-size: 16px;\n}\n.tip-num .red-txt {\n  color: red;\n}\n.tip-num .mar-5 {\n  color: white;\n  margin: 0 5px;\n}\n.tip-num .white-txt {\n  color: white;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  position: relative;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.arrow-warp {\n  position: relative;\n  width: 20px;\n  height: 20px;\n  background: transparent;\n  display: inline-block;\n  cursor: pointer;\n}\n.arrow {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  overflow: hidden;\n  display: inline-block;\n}\n.arrow:after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  top: 9px;\n  left: -27px;\n  width: 40px;\n  height: 40px;\n  border: 1px solid #fff;\n  border-radius: 22%;\n}\n.inner {\n  display: block;\n  position: absolute;\n  top: 5px;\n  left: -6px;\n  width: 0px;\n  height: 0px;\n  border: 5px solid;\n  z-index: 999;\n  border-color: transparent #fff transparent transparent;\n}\n.arrow-right .arrow:after {\n  left: 7px;\n}\n.arrow-right .inner {\n  left: 17px;\n  border-color: transparent transparent transparent #fff;\n}\n", ""]);
+	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n  color: #ffffff;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n  transition: all 1s ease-in-out 0s;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 5px;\n  transition: all 1s ease-in-out 0s;\n}\n.img-hover:hover .icon-side,\n.img-hover:hover .icon-box {\n  visibility: visible;\n  opacity: 1;\n}\n.over-hidden {\n  overflow: hidden;\n}\n.hide {\n  display: none;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.tip-num {\n  display: inline-block;\n  margin-left: 15px;\n  font-size: 16px;\n}\n.tip-num .red-txt {\n  color: red;\n}\n.tip-num .mar-5 {\n  color: white;\n  margin: 0 5px;\n}\n.tip-num .white-txt {\n  color: white;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  position: relative;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.arrow-warp {\n  position: relative;\n  width: 20px;\n  height: 20px;\n  background: transparent;\n  display: inline-block;\n  cursor: pointer;\n}\n.arrow {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  overflow: hidden;\n  display: inline-block;\n}\n.arrow:after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  top: 9px;\n  left: -27px;\n  width: 40px;\n  height: 40px;\n  border: 1px solid #fff;\n  border-radius: 22%;\n}\n.inner {\n  display: block;\n  position: absolute;\n  top: 5px;\n  left: -6px;\n  width: 0px;\n  height: 0px;\n  border: 5px solid;\n  z-index: 999;\n  border-color: transparent #fff transparent transparent;\n}\n.arrow-right .arrow:after {\n  left: 7px;\n}\n.arrow-right .inner {\n  left: 17px;\n  border-color: transparent transparent transparent #fff;\n}\n", ""]);
 
 	// exports
 
