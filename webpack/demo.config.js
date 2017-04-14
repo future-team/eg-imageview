@@ -30,8 +30,8 @@ module.exports =extend({}, {
         './example/src/index.js'
     ],
     output:{
-        path:path.join(process.cwd(),'dist'),
-        filename:config.name+'.js'
+        path: path.join(process.cwd(),'/example/build'),
+        filename: config.name+'.js'
     },
     module:{
         loaders:[/*

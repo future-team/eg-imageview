@@ -11,6 +11,7 @@ var open = require('gulp-open');
 var babel = require('gulp-babel');
 
 var config = require('./package.json');
+var shell = require('shelljs');
 
 var error = function(e){
   console.error(e);
@@ -42,12 +43,13 @@ gulp.task('demo-webpack', function(done) {
       "*": "http://localhost:9090"
     },*/
     filename: config.name+".js",
-    publicPath: '/dist/',
+    publicPath: '/example/build/',
     //headers: { "X-Custom-Header": "yes" },
     stats: { colors: true }
   });
-  server.listen(8081, "localhost", function() {});
+  server.listen(8081, "localhost", function() {
 
+  });
 });
 
 gulp.task('example-webpack',function(done){
@@ -56,6 +58,12 @@ gulp.task('example-webpack',function(done){
         gutil.log("[webpack]", stats.toString({
             // output options
         }));
+        shell.mv([
+            'example/build/*.eot',
+            'example/build/*.woff',
+            'example/build/*.ttf',
+            'example/build/*.svg',
+        ],'example/');
         done();
     });
 });
@@ -99,5 +107,5 @@ gulp.task('watch', function () {
 
 gulp.task('default', ['babel','require-webpack',/*, 'html', 'asset'*/]);
 gulp.task('test',['karma']);
-gulp.task('demo', ['demo-webpack','open']);
+gulp.task('demo', ['example-webpack', 'demo-webpack','open']);
 gulp.task('min',['min-webpack']);
