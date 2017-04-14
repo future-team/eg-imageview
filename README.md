@@ -101,7 +101,12 @@ ps： file参数需按上述结构。单张图片支持对象，多张必须为�
                zoomOut:true
                };
     function show(){
-        Dialog.mask('testIamgeView');
+        Dialog.mask('testIamgeView').then(function(){
+            console.log('success');
+            Dialog.close();
+        },function(type){
+            console.log('cancel');
+        });
     }
     
     ReactDom.render(
