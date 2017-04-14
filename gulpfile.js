@@ -7,7 +7,7 @@ var demoWebpackConfig = require('./webpack/demo.config');
 var webpackConfig = require('./webpack/webpack.config');
 var WebpackDevServer = require("webpack-dev-server");
 var open = require('gulp-open');
-
+var extend = require('extend');
 var babel = require('gulp-babel');
 
 var config = require('./package.json');
@@ -33,9 +33,7 @@ gulp.task('open', function () {
 });
 
 gulp.task('demo-webpack', function(done) {
-
   var compiler = webpack(demoWebpackConfig);
-
   var server = new WebpackDevServer(compiler, {
     hot: true,
     historyApiFallback: false,
@@ -48,16 +46,31 @@ gulp.task('demo-webpack', function(done) {
     stats: { colors: true }
   });
   server.listen(8081, "localhost", function() {
-
+    console.log('server done!')
   });
 });
 
+/**
+ * i don't why do this, but it is effective!
+ */
 gulp.task('example-webpack',function(done){
-    webpack(demoWebpackConfig).run(function(err, stats) {
+    // 先删除原来的字体文件
+    shell.rm([
+        'example/*.eot',
+        'example/*.woff',
+        'example/*.ttf',
+        'example/*.svg',
+    ]);
+    var wpk = extend({}, demoWebpackConfig, {
+        entry: ['./example/src/index.js'],
+        plugins: []
+    });
+    webpack(wpk).run(function(err, stats) {
         if(err) throw new gutil.PluginError("example-webpack", err);
         gutil.log("[webpack]", stats.toString({
             // output options
         }));
+        // 手动拷贝字体文件，不知道为撒一定要在根目录下！
         shell.mv([
             'example/build/*.eot',
             'example/build/*.woff',
@@ -107,5 +120,5 @@ gulp.task('watch', function () {
 
 gulp.task('default', ['babel','require-webpack',/*, 'html', 'asset'*/]);
 gulp.task('test',['karma']);
-gulp.task('demo', ['example-webpack', 'demo-webpack','open']);
+gulp.task('demo', ['demo-webpack','open']);
 gulp.task('min',['min-webpack']);

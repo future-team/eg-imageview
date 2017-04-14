@@ -121,7 +121,7 @@ class App extends Component {
             <Router history={this.history}>
                 <Route path="/demo1" name="demo1" component={Demo1} />
                 <Route path="/demo2" name="demo2" component={Demo2} />
-                <Redirect from="/" to="/demo2" />
+                <Redirect from="/" to="/demo1" />
             </Router>
         );
     }

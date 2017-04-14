@@ -12,7 +12,7 @@
   "scripts": {
     "build": "node_modules/.bin/gulp && node_modules/.bin/gulp min",
     "test": "karma start",
-    "demo": "node_modules/.bin/gulp demo",
+    "demo": "node_modules/.bin/gulp example-webpack && node_modules/.bin/gulp demo",
     "doc": "smartDoc ||node_modules/.bin/smartDoc",
     "prepublish": "npm run build",
     "start": "npm run demo"
@@ -36,6 +36,7 @@
     "babel-loader": "^5.3.2",
     "babel-polyfill": "^6.8.0",
     "css-loader": "0.17.0",
+    "eagle-ui": "^4.0.9",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "^0.11.1",
     "gfs-head": "0.0.5",
