@@ -439,7 +439,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return _react2['default'].createElement(
 	            _eagleUi.Dialog,
-	            _extends({ id: this.props.id, isClose: true, isMask: this.props.isMask, title: this.name }, this.props),
+	            _extends({ className: 'imgview-dialog', id: this.props.id, isClose: true, isMask: this.props.isMask, title: this.name }, this.props),
 	            _react2['default'].createElement(
 	                'div',
 	                { className: 'img-hover' },
@@ -677,23 +677,21 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * 渲染旋转箭头方向
-	     * */
-
-	    ImageView.prototype.renderArrow = function renderArrow(key, dir) {
-	        var _context2;
-
-	        var dirs = {
-	            left: -1,
-	            right: 1
-	        };
-	        return _react2['default'].createElement(
-	            'div',
-	            { onClick: (_context2 = this.cssEnhance).bind.call(_context2, this, 'rotate', dirs[dir]),
-	                className: _classnames2['default']('arrow-warp', 'arrow-' + dir, this.isHideIcon(key)) },
-	            _react2['default'].createElement('div', { className: 'arrow' }),
-	            _react2['default'].createElement('div', { className: 'inner' })
-	        );
-	    };
+	     renderArrow(key,dir){
+	        let dirs={
+	            left:-1,
+	            right:1
+	        }
+	        return <div onClick={::this.cssEnhance.bind(this,'rotate',dirs[dir])}
+	                    className={classnames(
+	                                            'arrow-warp',
+	                                            `arrow-${dir}`,
+	                                             this.isHideIcon(key)
+	                                            )}>
+	                    <div className='arrow'></div>
+	                    <div className='inner'></div>
+	                </div>
+	     } * */
 
 	    /**
 	     * 重置图片的状态
@@ -1349,7 +1347,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n  color: #ffffff;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n  transition: all 1s ease-in-out 0s;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 5px;\n  transition: all 1s ease-in-out 0s;\n}\n.img-hover:hover .icon-side,\n.img-hover:hover .icon-box {\n  visibility: visible;\n  opacity: 1;\n}\n.over-hidden {\n  overflow: hidden;\n}\n.hide {\n  display: none;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.tip-num {\n  display: inline-block;\n  margin-left: 15px;\n  font-size: 16px;\n}\n.tip-num .red-txt {\n  color: red;\n}\n.tip-num .mar-5 {\n  color: white;\n  margin: 0 5px;\n}\n.tip-num .white-txt {\n  color: white;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  position: relative;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.arrow-warp {\n  position: relative;\n  width: 20px;\n  height: 20px;\n  background: transparent;\n  display: inline-block;\n  cursor: pointer;\n}\n.arrow {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  overflow: hidden;\n  display: inline-block;\n}\n.arrow:after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  top: 9px;\n  left: -27px;\n  width: 40px;\n  height: 40px;\n  border: 1px solid #fff;\n  border-radius: 22%;\n}\n.inner {\n  display: block;\n  position: absolute;\n  top: 5px;\n  left: -6px;\n  width: 0px;\n  height: 0px;\n  border: 5px solid;\n  z-index: 999;\n  border-color: transparent #fff transparent transparent;\n}\n.arrow-right .arrow:after {\n  left: 7px;\n}\n.arrow-right .inner {\n  left: 17px;\n  border-color: transparent transparent transparent #fff;\n}\n", ""]);
+	exports.push([module.id, ".imgview-dialog .upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n  color: #ffffff;\n}\n.imgview-dialog .icon-box {\n  position: absolute;\n  bottom: 20px;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n  transition: all 1s ease-in-out 0s;\n}\n.imgview-dialog .icon-side {\n  position: absolute;\n  top: 50%;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 5px;\n  transition: all 1s ease-in-out 0s;\n}\n.imgview-dialog .img-hover:hover .icon-side,\n.imgview-dialog .img-hover:hover .icon-box {\n  visibility: visible;\n  opacity: 1;\n}\n.imgview-dialog .over-hidden {\n  overflow: hidden;\n}\n.imgview-dialog .hide {\n  display: none;\n}\n.imgview-dialog .left-15 {\n  left: 15px;\n}\n.imgview-dialog .right-15 {\n  right: 15px;\n}\n.imgview-dialog .tip-num {\n  display: inline-block;\n  margin-left: 15px;\n  font-size: 16px;\n}\n.imgview-dialog .tip-num .red-txt {\n  color: red;\n}\n.imgview-dialog .tip-num .mar-5 {\n  color: white;\n  margin: 0 5px;\n}\n.imgview-dialog .tip-num .white-txt {\n  color: white;\n}\n.imgview-dialog .img-wrap {\n  position: relative;\n}\n.imgview-dialog .img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.imgview-dialog .img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.imgview-dialog .img-wrap .draggable {\n  cursor: move;\n}\n.imgview-dialog .img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.imgview-dialog .img-wrap img {\n  position: relative;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n/*.arrow-warp{\n  position: relative;\n  width: 20px;\n  height: 20px;\n  background: transparent;\n  display: inline-block;\n  cursor:pointer;\n}\n.arrow {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  overflow: hidden;\n  display: inline-block;\n  &:after {\n    content: \"\";\n    display: block;\n    position: absolute;\n    top: 9px;\n    left: -27px;\n    width: 40px;\n    height: 40px;\n    border: 1px solid #fff;\n    border-radius: 22%;\n  }\n\n}\n.inner {\n  display: block;\n  position: absolute;\n  top: 5px;\n  left: -6px;\n  width: 0px;\n  height: 0px;\n  border: 5px solid;\n  z-index: 999;\n  border-color: transparent #fff transparent transparent;\n}\n.arrow-right{\n  .arrow:after{\n    left: 7px;\n  }\n  .inner{\n    left: 17px;\n    border-color: transparent transparent transparent #fff;\n  }\n}\n\n*/\n", ""]);
 
 	// exports
 

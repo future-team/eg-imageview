@@ -298,7 +298,7 @@ export default class ImageView extends Component {
         this.totalNum = this.getFileLength();
         let {leftRotate,rightRotate,zoomIn,zoomOut} = this.showIcon;
         return (
-            <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.name} {...this.props} >
+            <Dialog className='imgview-dialog' id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.name} {...this.props} >
                 <div className='img-hover'>
                     <div className={"img-wrap "+ (this.props.overflow? 'img-wrap-hidden':'img-wrap-show')}
                          style={{
@@ -520,7 +520,7 @@ export default class ImageView extends Component {
     }
     /**
      * 渲染旋转箭头方向
-     * */
+
     renderArrow(key,dir){
         let dirs={
             left:-1,
@@ -536,7 +536,7 @@ export default class ImageView extends Component {
                     <div className='inner'></div>
                 </div>
 
-    }
+    } * */
 
     /**
      * 重置图片的状态
