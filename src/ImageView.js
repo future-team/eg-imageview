@@ -168,11 +168,14 @@ export default class ImageView extends Component {
          * @todo 原来操作dom，先不管等待改进
          * */
         setTimeout((function () {
-            const domStyle = document.getElementById(this.imgId).style;//ReactDom.findDOMNode(this.refs[this.imgId]).style;
-            domStyle.WebkitTransform = this.transform;
-            domStyle.msTransform = this.transform;
-            domStyle.OTransform = this.transform;
-            domStyle.transform = this.transform;
+            const dom = document.getElementById(this.imgId)
+            if(dom != null){
+                const domStyle = dom.style;//ReactDom.findDOMNode(this.refs[this.imgId]).style;
+                domStyle.WebkitTransform = this.transform;
+                domStyle.msTransform = this.transform;
+                domStyle.OTransform = this.transform;
+                domStyle.transform = this.transform;
+            }
         }).bind(this));
     }
     /**
@@ -542,6 +545,6 @@ export default class ImageView extends Component {
         this.transform = 'scale(1, 1) rotate(0deg)';
         // Dialog.mask(this.props.id);
         this.transformImg();
-        this.draggable.reset();
+        this.draggable && this.draggable.reset();
     }
 }
