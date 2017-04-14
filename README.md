@@ -15,65 +15,65 @@
 ## 参数介绍   
 
 ```js
-            /**
-             * @param file
-             * 图片参数数组
-             * @default []
-             * */
-            file: {
-                name: '',
-                url: ''
-            },
-            id: '',
-            /**
-             * @param isMask
-             * 是显示遮罩层
-             * @default true
-             * */
-            isMask: true,
-            /**
-             * @param isLoop
-             * 是否循环播放
-             * @default true
-             * */
-            isLoop: true,
-            /**
-             * @param activeIndex
-             * 当前展示图片下标
-             * @default 0
-             * */
-            activeIndex:0
-           /**
-             * @param showIcon
-             * 配置要显示的操作图标
-             * @default Object
-             * */
-            showIcon:{
-                /**
-                 * @param leftRotate
-                 * 是否显示左旋转图标
-                 * @default false
-                 * */
-                leftRotate:false,
-                /**
-                 * @param rightRotate
-                 * 是否显示右旋转图标
-                 * @default false
-                 * */
-                rightRotate:false,
-                /**
-                 * @param zoomIn
-                 * 是否显示放大图标
-                 * @default false
-                 * */
-                zoomIn:false,
-                /**
-                 * @param zoomOut
-                 * 是否显示放大图标
-                 * @default false
-                 * */
-                zoomOut:false
-            }                                
+/**
+ * @param file
+ * 图片参数数组
+ * @default []
+ * */
+file: {
+    name: '',
+    url: ''
+},
+id: '',
+/**
+ * @param isMask
+ * 是显示遮罩层
+ * @default true
+ * */
+isMask: true,
+/**
+ * @param isLoop
+ * 是否循环播放
+ * @default true
+ * */
+isLoop: true,
+/**
+ * @param activeIndex
+ * 当前展示图片下标
+ * @default 0
+ * */
+activeIndex:0
+/**
+ * @param showIcon
+ * 配置要显示的操作图标
+ * @default Object
+ * */
+showIcon:{
+    /**
+     * @param leftRotate
+     * 是否显示左旋转图标
+     * @default false
+     * */
+    leftRotate:false,
+    /**
+     * @param rightRotate
+     * 是否显示右旋转图标
+     * @default false
+     * */
+    rightRotate:false,
+    /**
+     * @param zoomIn
+     * 是否显示放大图标
+     * @default false
+     * */
+    zoomIn:false,
+    /**
+     * @param zoomOut
+     * 是否显示放大图标
+     * @default false
+     * */
+    zoomOut:false
+}                                
             
 ```   
 
@@ -123,11 +123,11 @@ ps： file参数需按上述结构。单张图片支持对象，多张必须为�
 
 
 ```js
-                  <ImageView id="testIamgeView1" activeIndex={0}>
-                        <item url='./src/3.jpg' name='demo1'></item>
-                        <item url='./src/2.jpg' name='demo2'></item>
-                        <item url='./src/1.jpg' name='demo3'></item>
-                    </ImageView>
+<ImageView id="testIamgeView1" activeIndex={0}>
+    <item url='./src/3.jpg' name='demo1'></item>
+    <item url='./src/2.jpg' name='demo2'></item>
+    <item url='./src/1.jpg' name='demo3'></item>
+</ImageView>
 ```
 
 ## 示例演示
