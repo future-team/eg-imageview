@@ -53,9 +53,10 @@ export default class Draggable extends Component {
         slackY: PropTypes.number,
         touchIdentifier: PropTypes.number
     };
-
+    
     constructor(props) {
         super(props);
+        // console.dir(props.position);
         this.state = {
             dragging: false,
             dragged: false,
@@ -64,12 +65,21 @@ export default class Draggable extends Component {
             slackX: 0, slackY: 0,
             touchIdentifier: null
         };
+        this.id = props.elm
     }
     componentWillMount() {
 
     }
     componentDidMount() {
-
+        // var elm = this.getDElement();
+        // if(elm){
+        //     setTimeout(()=>{
+        //         this.setState({
+        //             x:elm.offsetWidth,
+        //             y:elm.offsetHeight
+        //         })
+        //     })
+        // }
     }
     componentWillReceiveProps(nextProps) {
         // Set x/y if position has changed
@@ -89,11 +99,11 @@ export default class Draggable extends Component {
         const draggable = this;
         const state = draggable.state;
         const isStart = !isNum(state.lastX);
-
+        let elm = this.getDElement()
         if (isStart) {
             // first start init data
             return {
-                node: ReactDOM.findDOMNode(draggable),
+                node:elm?elm: ReactDOM.findDOMNode(draggable),
                 deltaX: 0, deltaY: 0,
                 lastX: x, lastY: y,
                 x: x, y: y
@@ -101,7 +111,7 @@ export default class Draggable extends Component {
         } else {
             // calculate data.
             return {
-                node: ReactDOM.findDOMNode(draggable),
+                node:elm?elm:  ReactDOM.findDOMNode(draggable),
                 deltaX: x - state.lastX, deltaY: y - state.lastY,
                 lastX: state.lastX, lastY: state.lastY,
                 x: x, y: y
@@ -194,6 +204,9 @@ export default class Draggable extends Component {
     // TODO add prefix for browser
     createCSSTransform(styleObj) {
         const value = `translate( ${styleObj.x}px, ${styleObj.y}px)`;
+        if(this.id){
+            return `-webkit-transform:${value};transform:${value};`
+        }
         return {
             'WebkitTransform': value,
             'MozTransform':    value,
@@ -220,11 +233,32 @@ export default class Draggable extends Component {
         return this.handleDragStop(e);
     }
     reset() {
-        const newState = {
-            x: 0,
-            y: 0
-        };
-        this.setState(newState)
+        
+        var elm = this.getDElement();
+        if(elm){
+            setTimeout(()=>{
+                this.setState({
+                    x:-elm.offsetWidth/2,
+                    y:-elm.offsetHeight/2
+                })
+            })
+        }else{
+            const newState = {
+                x: 0,
+                y: 0
+            };
+            this.setState(newState)
+        }
+    }
+    getDElement(){
+        if(this.id){
+            var elm=document.getElementById(this.id)
+            if(elm){
+               return  elm.parentNode.parentNode.parentNode;
+            }
+        }
+
+        return null;
     }
     render() {
         const style = this.createCSSTransform(this.state);
@@ -234,6 +268,10 @@ export default class Draggable extends Component {
             'draggable-dragged': this.state.dragged
         });
         // TODO hack event
+        var elm = this.getDElement()
+        if(elm){
+            elm.style.cssText=style;
+        }
         return (
             <div {...this.props}
                 className="img-inner"
@@ -241,7 +279,7 @@ export default class Draggable extends Component {
                 onTouchStart = {this.onTouchStart.bind(this)}
                 onMouseUp = {this.onMouseUp.bind(this)}
                 onTouchEnd = {this.onTouchEnd.bind(this)}
-                style={style}>
+                style={this.id?{}:style}>
                 {React.cloneElement(React.Children.only(this.props.children), {
                     className: className,
                     style: {...this.props.children.props.style},

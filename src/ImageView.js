@@ -298,18 +298,33 @@ export default class ImageView extends Component {
         this.totalNum = this.getFileLength();
         let {leftRotate,rightRotate,zoomIn,zoomOut} = this.showIcon;
         return (
-            <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask} title={this.name} {...this.props} >
+            
+            <Dialog id={this.props.id} isClose={true} isMask={this.props.isMask}  {...this.props} isHeader={false} className={'imageview-dialog'}>
+                <Draggable elm={'imageview-header'} ref={(draggable)=>{
+                    this.draggable = draggable;
+                }} >
+                <div id='imageview-header' className={
+                    classnames(
+                        'eg-header',
+                        'h4',
+                        {
+                            'header-bg':true
+                        }
+                    )
+                } style={{
+                        textAlign:'left',
+                        cursor:'move'
+                    }}>{this.name}</div>
+                    </Draggable>
                 <div className='img-hover'>
                     <div className={"img-wrap "+ (this.props.overflow? 'img-wrap-hidden':'img-wrap-show')}
                          style={{
                             height: this.state.imgWrap.height,
                             width: this.state.imgWrap.width
                             }}>
-                        <Draggable ref={(draggable)=>{
-                            this.draggable = draggable;
-                        }}>
+                        
                             {this.renderContent()}
-                        </Draggable>
+                        
                     </div>
                     <div className={
                         classnames(
@@ -366,6 +381,7 @@ export default class ImageView extends Component {
                     </div>
                 </div>
             </Dialog>
+            
         );
     }
     /**

@@ -439,7 +439,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return _react2['default'].createElement(
 	            _eagleUi.Dialog,
-	            _extends({ id: this.props.id, isClose: true, isMask: this.props.isMask, title: this.name }, this.props),
+	            _extends({ id: this.props.id, isClose: true, isMask: this.props.isMask }, this.props, { isHeader: false, className: 'imageview-dialog' }),
+	            _react2['default'].createElement(
+	                _Draggable2['default'],
+	                { elm: 'imageview-header', ref: function (draggable) {
+	                        _this.draggable = draggable;
+	                    } },
+	                _react2['default'].createElement(
+	                    'div',
+	                    { id: 'imageview-header', className: _classnames2['default']('eg-header', 'h4', {
+	                            'header-bg': true
+	                        }), style: {
+	                            textAlign: 'left',
+	                            cursor: 'move'
+	                        } },
+	                    this.name
+	                )
+	            ),
 	            _react2['default'].createElement(
 	                'div',
 	                { className: 'img-hover' },
@@ -450,13 +466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            height: this.state.imgWrap.height,
 	                            width: this.state.imgWrap.width
 	                        } },
-	                    _react2['default'].createElement(
-	                        _Draggable2['default'],
-	                        { ref: function (draggable) {
-	                                _this.draggable = draggable;
-	                            } },
-	                        this.renderContent()
-	                    )
+	                    this.renderContent()
 	                ),
 	                _react2['default'].createElement(
 	                    'div',
@@ -874,6 +884,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, Draggable);
 
 	        _Component.call(this, props);
+	        // console.dir(props.position);
 	        this.state = {
 	            dragging: false,
 	            dragged: false,
@@ -882,11 +893,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	            slackX: 0, slackY: 0,
 	            touchIdentifier: null
 	        };
+	        this.id = props.elm;
 	    }
 
 	    Draggable.prototype.componentWillMount = function componentWillMount() {};
 
-	    Draggable.prototype.componentDidMount = function componentDidMount() {};
+	    Draggable.prototype.componentDidMount = function componentDidMount() {
+	        // var elm = this.getDElement();
+	        // if(elm){
+	        //     setTimeout(()=>{
+	        //         this.setState({
+	        //             x:elm.offsetWidth,
+	        //             y:elm.offsetHeight
+	        //         })
+	        //     })
+	        // }
+	    };
 
 	    Draggable.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
 	        // Set x/y if position has changed
@@ -903,11 +925,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var draggable = this;
 	        var state = draggable.state;
 	        var isStart = !_utils.isNum(state.lastX);
-
+	        var elm = this.getDElement();
 	        if (isStart) {
 	            // first start init data
 	            return {
-	                node: _reactLibReactDOM2['default'].findDOMNode(draggable),
+	                node: elm ? elm : _reactLibReactDOM2['default'].findDOMNode(draggable),
 	                deltaX: 0, deltaY: 0,
 	                lastX: x, lastY: y,
 	                x: x, y: y
@@ -915,7 +937,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else {
 	            // calculate data.
 	            return {
-	                node: _reactLibReactDOM2['default'].findDOMNode(draggable),
+	                node: elm ? elm : _reactLibReactDOM2['default'].findDOMNode(draggable),
 	                deltaX: x - state.lastX, deltaY: y - state.lastY,
 	                lastX: state.lastX, lastY: state.lastY,
 	                x: x, y: y
@@ -1025,6 +1047,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    Draggable.prototype.createCSSTransform = function createCSSTransform(styleObj) {
 	        var value = 'translate( ' + styleObj.x + 'px, ' + styleObj.y + 'px)';
+	        if (this.id) {
+	            return '-webkit-transform:' + value + ';transform:' + value + ';';
+	        }
 	        return {
 	            'WebkitTransform': value,
 	            'MozTransform': value,
@@ -1057,11 +1082,34 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    Draggable.prototype.reset = function reset() {
-	        var newState = {
-	            x: 0,
-	            y: 0
-	        };
-	        this.setState(newState);
+	        var _this = this;
+
+	        var elm = this.getDElement();
+	        if (elm) {
+	            setTimeout(function () {
+	                _this.setState({
+	                    x: -elm.offsetWidth / 2,
+	                    y: -elm.offsetHeight / 2
+	                });
+	            });
+	        } else {
+	            var newState = {
+	                x: 0,
+	                y: 0
+	            };
+	            this.setState(newState);
+	        }
+	    };
+
+	    Draggable.prototype.getDElement = function getDElement() {
+	        if (this.id) {
+	            var elm = document.getElementById(this.id);
+	            if (elm) {
+	                return elm.parentNode.parentNode.parentNode;
+	            }
+	        }
+
+	        return null;
 	    };
 
 	    Draggable.prototype.render = function render() {
@@ -1072,6 +1120,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            'draggable-dragged': this.state.dragged
 	        });
 	        // TODO hack event
+	        var elm = this.getDElement();
+	        if (elm) {
+	            elm.style.cssText = style;
+	        }
 	        return _react2['default'].createElement(
 	            'div',
 	            _extends({}, this.props, {
@@ -1080,7 +1132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                onTouchStart: this.onTouchStart.bind(this),
 	                onMouseUp: this.onMouseUp.bind(this),
 	                onTouchEnd: this.onTouchEnd.bind(this),
-	                style: style }),
+	                style: this.id ? {} : style }),
 	            _react2['default'].cloneElement(_react2['default'].Children.only(this.props.children), {
 	                className: className,
 	                style: _extends({}, this.props.children.props.style)
@@ -1349,7 +1401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 	// module
-	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n  color: #ffffff;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n  transition: all 1s ease-in-out 0s;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 5px;\n  transition: all 1s ease-in-out 0s;\n}\n.img-hover:hover .icon-side,\n.img-hover:hover .icon-box {\n  visibility: visible;\n  opacity: 1;\n}\n.over-hidden {\n  overflow: hidden;\n}\n.hide {\n  display: none;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.tip-num {\n  display: inline-block;\n  margin-left: 15px;\n  font-size: 16px;\n}\n.tip-num .red-txt {\n  color: red;\n}\n.tip-num .mar-5 {\n  color: white;\n  margin: 0 5px;\n}\n.tip-num .white-txt {\n  color: white;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  position: relative;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.arrow-warp {\n  position: relative;\n  width: 20px;\n  height: 20px;\n  background: transparent;\n  display: inline-block;\n  cursor: pointer;\n}\n.arrow {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  overflow: hidden;\n  display: inline-block;\n}\n.arrow:after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  top: 9px;\n  left: -27px;\n  width: 40px;\n  height: 40px;\n  border: 1px solid #fff;\n  border-radius: 22%;\n}\n.inner {\n  display: block;\n  position: absolute;\n  top: 5px;\n  left: -6px;\n  width: 0px;\n  height: 0px;\n  border: 5px solid;\n  z-index: 999;\n  border-color: transparent #fff transparent transparent;\n}\n.arrow-right .arrow:after {\n  left: 7px;\n}\n.arrow-right .inner {\n  left: 17px;\n  border-color: transparent transparent transparent #fff;\n}\n", ""]);
+	exports.push([module.id, ".upload-icon {\n  fill: #fff;\n  margin: 0 5px;\n  cursor: pointer;\n  color: #ffffff;\n}\n.icon-box {\n  position: absolute;\n  bottom: 20px;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 10px;\n  transition: all 1s ease-in-out 0s;\n}\n.icon-side {\n  position: absolute;\n  top: 50%;\n  visibility: hidden;\n  opacity: 0;\n  background: rgba(0, 0, 0, 0.7);\n  padding: 5px 5px;\n  transition: all 1s ease-in-out 0s;\n}\n.img-hover:hover .icon-side,\n.img-hover:hover .icon-box {\n  visibility: visible;\n  opacity: 1;\n}\n.over-hidden {\n  overflow: hidden;\n}\n.hide {\n  display: none;\n}\n.left-15 {\n  left: 15px;\n}\n.right-15 {\n  right: 15px;\n}\n.tip-num {\n  display: inline-block;\n  margin-left: 15px;\n  font-size: 16px;\n}\n.tip-num .red-txt {\n  color: red;\n}\n.tip-num .mar-5 {\n  color: white;\n  margin: 0 5px;\n}\n.tip-num .white-txt {\n  color: white;\n}\n.img-wrap {\n  position: relative;\n}\n.img-wrap.img-wrap-hidden {\n  overflow: hidden;\n}\n.img-wrap.img-wrap-show {\n  overflow: visible;\n}\n.img-wrap .draggable {\n  cursor: move;\n}\n.img-wrap .img-inner {\n  width: 100%;\n  height: 100%;\n}\n.img-wrap img {\n  position: relative;\n  -moz-user-select: none;\n  -webkit-user-select: none;\n  -ms-user-select: none;\n  user-select: none;\n}\n.arrow-warp {\n  position: relative;\n  width: 20px;\n  height: 20px;\n  background: transparent;\n  display: inline-block;\n  cursor: pointer;\n}\n.arrow {\n  width: 100%;\n  height: 100%;\n  position: relative;\n  overflow: hidden;\n  display: inline-block;\n}\n.arrow:after {\n  content: \"\";\n  display: block;\n  position: absolute;\n  top: 9px;\n  left: -27px;\n  width: 40px;\n  height: 40px;\n  border: 1px solid #fff;\n  border-radius: 22%;\n}\n.inner {\n  display: block;\n  position: absolute;\n  top: 5px;\n  left: -6px;\n  width: 0px;\n  height: 0px;\n  border: 5px solid;\n  z-index: 999;\n  border-color: transparent #fff transparent transparent;\n}\n.arrow-right .arrow:after {\n  left: 7px;\n}\n.arrow-right .inner {\n  left: 17px;\n  border-color: transparent transparent transparent #fff;\n}\n.imageview-dialog .eg-content {\n  padding: 0 ;\n}\n.imageview-dialog .img-hover {\n  padding: 15px;\n}\n", ""]);
 
 	// exports
 
